@@ -13,8 +13,12 @@ import { RouterLink } from "vue-router";
       </RouterLink>
       
       <div class="navlinks">
-        <RouterLink to="/">Research</RouterLink>
-        <RouterLink to="/translator">Translator</RouterLink>
+        <RouterLink to="/">
+            Research
+        </RouterLink>
+        <RouterLink to="/translator">
+          Translator
+        </RouterLink>
       </div>
     </div>
   </div>
@@ -31,4 +35,5 @@ import { RouterLink } from "vue-router";
   font-size: 1.0em;
   margin: 0.5em 1em;
 }
+
 </style>

@@ -1,9 +1,9 @@
 <template>
-<Navbar />
-<div id="content-wrapper">
-    <router-view></router-view>
-</div>
-<Footer />
+  <Navbar />
+  <div id="content-wrapper">
+    <router-view />
+  </div>
+  <Footer />
 </template>
 
 <script setup>

@@ -1,4 +1,8 @@
+/* 
+
 import { axios } from 'axios'
+
+// Might be used eventuelly, but not used for now
 
 const developmentURL = 'http://localhost:3000/'
 const productionURL = 'https://api.example.com/'
@@ -32,4 +36,4 @@ function axiosClient(baseURL) {
 }
 
 const apiClient = axiosClient(productionURL)
-
+*/

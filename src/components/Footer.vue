@@ -9,9 +9,15 @@ import { RouterLink } from "vue-router";
       <h2>Auto Situational Awareness</h2>
       <h3>Set up with ♥ in a short time by UkraineNow</h3>
       <div class="navlinks">
-        <RouterLink to="/">Research</RouterLink>
-        <RouterLink to="/translator">Translator</RouterLink>
-        <RouterLink to="/about">About</RouterLink>
+        <RouterLink to="/">
+          Research
+        </RouterLink>
+        <RouterLink to="/translator">
+          Translator
+        </RouterLink>
+        <RouterLink to="/about">
+          About
+        </RouterLink>
       </div>
     </div>
   </div>
