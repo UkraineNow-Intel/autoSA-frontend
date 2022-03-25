@@ -19,4 +19,11 @@ import Footer from '@/components/Footer.vue'
   margin: auto;
   min-height: 80vh;
 }
+
+.page-wrapper {
+  max-width: 1200px;
+  margin: auto;
+  padding: 2em;
+  background-color: lightgrey;
+}
 </style>

@@ -80,3 +80,18 @@ Add static images to the `./public/` directory, then access them in your html li
     <img src="/image.png" />
 </template>
 ```
+
+
+### Before you commit: Linting!
+Please make sure to run 
+
+```cmd
+npm run lint
+```
+or
+
+```cmd
+yarn lint
+```
+
+before commiting anything, so that all code looks pretty!

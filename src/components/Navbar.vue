@@ -14,7 +14,7 @@ import { RouterLink } from "vue-router";
       
       <div class="navlinks">
         <RouterLink to="/">
-            Research
+          Research
         </RouterLink>
         <RouterLink to="/translator">
           Translator
