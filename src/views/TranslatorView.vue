@@ -1,6 +1,6 @@
 
 <script setup>
-import AutoSaDataService from "../api/api";
+import AutoSaApi from "../api/api";
 import { ref } from 'vue'
 
 const stringToTranslate = ref('')
@@ -13,7 +13,7 @@ function updateResult(response){
 
 function onSubmit(){
   if (stringToTranslate.value !== '') {
-    AutoSaDataService.getTranslation(stringToTranslate.value).then(updateResult)
+    AutoSaApi.getTranslation("en", "uk", stringToTranslate.value).then(updateResult)
   } 
 }
 
