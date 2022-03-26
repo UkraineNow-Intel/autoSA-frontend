@@ -1,27 +1,20 @@
-
-<script setup>
-import { RouterLink } from "vue-router";
-</script>
-
 <template>
   <div class="header">
     <div class="items">
       <h2>Auto Situational Awareness</h2>
       <h3>Set up with ♥ in a short time by UkraineNow</h3>
       <div class="navlinks">
-        <RouterLink to="/">
-          Research
-        </RouterLink>
-        <RouterLink to="/translator">
-          Translator
-        </RouterLink>
-        <RouterLink to="/about">
-          About
-        </RouterLink>
+        <!-- <router-link to="">Research</router-link> -->
+        <router-link :to="{ name: 'translator' }">Translator</router-link>
+        <!-- <router-link to="">About</router-link> -->
       </div>
     </div>
   </div>
 </template>
+
+<script setup>
+import { RouterLink } from "vue-router"
+</script>
 
 <style scoped>
 .header {
