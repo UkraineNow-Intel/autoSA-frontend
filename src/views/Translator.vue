@@ -1,3 +1,22 @@
+<template>
+  <div class="page-wrapper">
+    <TranslationTextArea
+      :text="inputString"
+      :language="sourceLanguage"
+      @language-update="setSourceLanguage"
+      @text-update="setInputText"
+      @submit="onSubmit"
+    />
+    <hr class="m-4">
+    <TranslationTextArea
+      :text="resultString"
+      :language="targetLanguage"
+      disabled
+      @language-update="setTargetLanguage"
+      @submit="onSubmit"
+    />
+  </div>
+</template>
 
 <script setup>
 import AutoSaApi from "../api/api";
@@ -31,25 +50,4 @@ function onSubmit(stringToTranslate){
     AutoSaApi.getTranslation(sourceLanguage.value, targetLanguage.value, stringToTranslate).then(setResultText)
   } 
 }
-
 </script>
-
-<template>
-  <div class="page-wrapper">
-    <TranslationTextArea
-      :text="inputString"
-      :language="sourceLanguage"
-      @language-update="setSourceLanguage"
-      @text-update="setInputText"
-      @submit="onSubmit"
-    />
-    <hr class="m-4">
-    <TranslationTextArea
-      :text="resultString"
-      :language="targetLanguage"
-      disabled
-      @language-update="setTargetLanguage"
-      @submit="onSubmit"
-    />
-  </div>
-</template>

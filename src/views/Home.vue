@@ -1,9 +1,7 @@
 <template>
-  <div
-    class="bg-cover bg-center"
-    style="background-image: url('./image.jfif')"
-  >
-    <div class="min-h-[50vh] py-10 flex items-center">
+  <div class="bg-cover bg-center" style="background-image: url('./image.jfif')">
+
+    <section class="min-h-[50vh] py-10 flex items-center">
       <div class="container mx-auto max-w-5xl text-center">
         <form action="">
           <input
@@ -16,10 +14,13 @@
           </button>
         </form>
       </div>
-    </div>
+    </section>
+
   </div>
 </template>
 
 <script setup>
+
+import Navbar from '@/components/Navbar.vue'
 
 </script>

@@ -1,24 +1,24 @@
 <template>
-  <Navbar />
-  <div id="content-wrapper">
-    <router-view />
+  <div class="flex flex-col min-h-screen">
+    <Navbar />
+    <router-view></router-view>
+    <Footer class="mt-auto" />
   </div>
-  <Footer />
 </template>
 
 <script setup>
-
 import Navbar from '@/components/Navbar.vue'
 import Footer from '@/components/Footer.vue'
 
 </script>
 
 <style>
-#content-wrapper {
+/* #content-wrapper {
   width: 100%;
   margin: auto;
   min-height: 80vh;
 }
+*/
 
 .page-wrapper {
   max-width: 1200px;

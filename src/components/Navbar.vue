@@ -4,11 +4,11 @@
       <router-link :to="{ name: 'home' }">
         <div class="text-4xl font-semibold align-middle">
           <span class="text-yellow-300">Auto</span><span class="text-blue-500">SA</span>
-          <span class="text-lg text-white ml-1 font-light hidden sm:inline-block">Auto Situational Awareness</span>
+          <span class="text-lg text-white ml-2 font-light hidden sm:inline-block">Auto Situational Awareness</span>
         </div>
       </router-link>
       
-      <div class="">
+      <div>
         <router-link class="nav-link" :to="{ name: 'home' }">Research</router-link>
         <router-link class="nav-link" :to="{ name: 'translator' }">Translator</router-link>
       </div>
