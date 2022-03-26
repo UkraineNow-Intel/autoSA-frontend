@@ -7,7 +7,8 @@ Vue.js frontend for autoSA
 ### Technologies Used
 - Netlify
 - Vue.js (Vue 3)
-- TailwindCSS
+- [TailwindCSS](https://tailwindcss.com/)
+- [Element-Plus](https://element-plus.org/en-US/component/button.html)
 
 ### Useful Extensions for editing
 
@@ -34,6 +35,8 @@ yarn dev
 be live updated in your browser window when you open the link it provides :) 
 
 By default, the server will be served at `http://localhost:3000/` when you run it.
+
+Furthermore, a proxy is created to our backend served at `http://localhost:3000/api/`. When you run requests against `./api/`, they will automatically be forwarded to our (production!) backend.
 
 ### How to Add a Webpage
 
