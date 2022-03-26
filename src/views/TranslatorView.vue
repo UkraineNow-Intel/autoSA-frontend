@@ -3,17 +3,32 @@
 import AutoSaApi from "../api/api";
 import { ref } from 'vue'
 
-const stringToTranslate = ref('')
-const resultString = ref('')
+import TranslationTextArea from '@/components/TranslationTextArea.vue'
 
-function updateResult(response){
-  console.log(response.data)
+const inputString = ref('')
+const resultString = ref('')
+const sourceLanguage = ref('en')
+const targetLanguage = ref('uk')
+
+
+// Event handelers
+function setSourceLanguage(language){
+  sourceLanguage.value = language
+}
+function setTargetLanguage(language){
+  targetLanguage.value = language
+}
+function setInputText(language){
+  inputString.value = language
+}
+function setResultText(response){
   resultString.value = response.data.translation
 }
 
-function onSubmit(){
+// On submit -> translate
+function onSubmit(stringToTranslate){
   if (stringToTranslate.value !== '') {
-    AutoSaApi.getTranslation("en", "uk", stringToTranslate.value).then(updateResult)
+    AutoSaApi.getTranslation(sourceLanguage.value, targetLanguage.value, stringToTranslate).then(setResultText)
   } 
 }
 
@@ -21,20 +36,20 @@ function onSubmit(){
 
 <template>
   <div class="page-wrapper">
-    <h2>Translator</h2>
-    <input
-      v-model="stringToTranslate"
-      class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
-      @keyup.enter="onSubmit"
-      @input="event => text = event.target.value"
-    >
-
-    <button
-      class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-      @click="onSubmit"
-    >
-      Submit
-    </button>
-    <div>Output: {{ resultString }}</div>
+    <TranslationTextArea
+      :text="inputString"
+      :language="sourceLanguage"
+      @language-update="setSourceLanguage"
+      @text-update="setInputText"
+      @submit="onSubmit"
+    />
+    <hr class="m-4">
+    <TranslationTextArea
+      :text="resultString"
+      :language="targetLanguage"
+      disabled
+      @language-update="setTargetLanguage"
+      @submit="onSubmit"
+    />
   </div>
 </template>
