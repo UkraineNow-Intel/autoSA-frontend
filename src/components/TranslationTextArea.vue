@@ -1,10 +1,19 @@
 
 <template>
   <div>
-    <el-radio-group v-model="currentLanguage" @input="updateLanguageValue">
-      <el-radio label="en">English</el-radio>
-      <el-radio label="uk">Ukrainian</el-radio>
-      <el-radio label="ru">Russian</el-radio>
+    <el-radio-group
+      v-model="currentLanguage"
+      @input="updateLanguageValue"
+    >
+      <el-radio label="en">
+        English
+      </el-radio>
+      <el-radio label="uk">
+        Ukrainian
+      </el-radio>
+      <el-radio label="ru">
+        Russian
+      </el-radio>
     </el-radio-group>
     <el-input
       v-model="currentText"
@@ -16,7 +25,12 @@
       @input="updateTextValue"
       @keyup.enter="onSubmit"
     />
-    <el-button v-if="!isDisabled" @click="onSubmit">Submit</el-button>
+    <el-button
+      v-if="!isDisabled"
+      @click="onSubmit"
+    >
+      Submit
+    </el-button>
   </div>
 </template>
 

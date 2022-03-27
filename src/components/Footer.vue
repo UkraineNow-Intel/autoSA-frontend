@@ -8,8 +8,18 @@
       </div>
       <div>Built to help save Ukrainians from Russian aggression.</div>
       <div>
-        <router-link class="nav-link" :to="{ name: 'home' }">Research</router-link>
-        <router-link class="nav-link" :to="{ name: 'translator' }">Translator</router-link>
+        <router-link
+          class="nav-link"
+          :to="{ name: 'home' }"
+        >
+          Research
+        </router-link>
+        <router-link
+          class="nav-link"
+          :to="{ name: 'translator' }"
+        >
+          Translator
+        </router-link>
       </div>
     </div>
   </footer>

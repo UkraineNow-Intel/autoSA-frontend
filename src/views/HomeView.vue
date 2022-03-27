@@ -1,9 +1,14 @@
 <template>
-  <div class="bg-cover bg-center" style="background-image: url('./image.jfif')">
-
+  <div
+    class="bg-cover bg-center"
+    style="background-image: url('./image.jfif')"
+  >
     <section class="min-h-[50vh] py-10 px-5 flex items-center">
       <div class="container mx-auto max-w-5xl text-center">
-        <form class="flex justify-center" action="">
+        <form
+          class="flex justify-center"
+          action=""
+        >
           <input
             class="p-3 flex-1 text-lg rounded-l shadow-lg shadow-black/70  focus:placeholder-cyan-400 hover:placeholder-cyan-400  max-w-md outline-none transition-colors" 
             placeholder="Enter location or phrase."
@@ -15,12 +20,5 @@
         </form>
       </div>
     </section>
-
   </div>
 </template>
-
-<script setup>
-
-import Navbar from '@/components/Navbar.vue'
-
-</script>
