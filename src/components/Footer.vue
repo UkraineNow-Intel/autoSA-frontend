@@ -32,7 +32,7 @@ import { RouterLink } from "vue-router"
 <style scoped>
 
 .nav-link {
-  @apply text-white hover:text-yellow-300 transition-colors p-3 
+  @apply text-white hover:text-yellow-300 transition-colors p-3 duration-100
 }
 
 </style>
