@@ -32,23 +32,7 @@ import { RouterLink } from "vue-router"
 <style scoped>
 
 .nav-link {
-  @apply text-white hover:text-yellow-300 transition-colors p-3
+  @apply text-white hover:text-yellow-300 transition-colors p-3 hover:underline decoration-yellow-300
 }
 
-
-/* .items {
-  display: grid;
-  grid-auto-flow: column;
-  grid-gap: 10px;
-  margin: 30px;
-  overflow: auto;
-}
-.navlinks {
-  text-align: right;
-}
-.navlinks a {
-  font-size: 1.2em;
-  margin: 1em;
-}
- */
 </style>
