@@ -11,5 +11,6 @@ module.exports = {
     // 'vue/no-unused-vars': 'error'
     "vue/max-attributes-per-line": "off",
     "vue/singleline-html-element-content-newline": "off",
+    "vue/multiline-html-element-content-newline": "off",
   }
 }

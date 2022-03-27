@@ -3,6 +3,7 @@
     class="bg-cover bg-center" 
     style="background-image: url('./image.jfif')"
   >
+
     <section class="min-h-[50vh] py-10 px-5 flex items-center">
       <div class="container mx-auto max-w-5xl text-center">
         <form class="flex justify-center">
@@ -17,5 +18,6 @@
         </form>
       </div>
     </section>
+
   </div>
 </template>

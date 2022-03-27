@@ -23,7 +23,7 @@ import { RouterLink } from 'vue-router';
 <style scoped>
 
 .nav-link {
-  @apply text-white hover:text-yellow-300 active-class:text-yellow-300 p-3 hover:underline active-class:underline underline-offset-2 decoration-yellow-300
+  @apply text-white hover:text-yellow-300 active-class:text-yellow-300 p-3 active-class:underline underline-offset-2 decoration-yellow-300
 }
 
 </style>
