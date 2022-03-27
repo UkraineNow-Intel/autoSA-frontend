@@ -19,7 +19,5 @@
       </div>
     </section>
 
-    <section class="bg-slate-800 min-h-screen"></section>
-
   </div>
 </template>
