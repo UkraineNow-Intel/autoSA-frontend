@@ -1,4 +1,5 @@
 import http from "./client";
+import sourceData from "./mockdata"
 
 class AutoSaApi {
     /**
@@ -8,6 +9,13 @@ class AutoSaApi {
      */
     getTranslation(sourceLang, targetLang, stringToTranslate) {
         return http.get(`/translation/${sourceLang}/${targetLang}/${encodeURIComponent(stringToTranslate)}`)
+    }
+
+    /**
+     * returns a list of recent information from all sources
+     */
+     getSources() {
+        return sourceData
     }
 }
 export default new AutoSaApi();
