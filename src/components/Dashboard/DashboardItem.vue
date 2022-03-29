@@ -1,7 +1,7 @@
 <template>
   <div class="dashboard-item">
     <div class="dashboard-image">
-      <img src="/image.jfif" />
+      <img src="https://placekitten.com/500/300" />
     </div>
     <div class="dashboard-meta">
       <div v-if="source"><span>Posted:</span> <span>{{ source }}</span> <span v-if="sourceInterface">({{ sourceInterface }})</span></div>
