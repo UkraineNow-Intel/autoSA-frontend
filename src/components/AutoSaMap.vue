@@ -6,7 +6,13 @@
       name="OpenStreetMap"
       :max-zoom="10"
     />
-    <l-marker v-for="marker in markers" :key="marker.id" :lat-lng="marker.coordinates">
+    <l-marker
+      v-for="marker in markers"
+      :key="marker.id"
+      :lat-lng="marker.coordinates"    
+      @mouseover="updateHovered(marker.id)"
+      @mouseleave="updateHovered(-1)"
+    >
       <l-icon :icon-url="Logo" :icon-size="marker.size" />
       <l-tooltip>
         {{ marker.text }}
@@ -16,11 +22,17 @@
 </template>
 
 <script setup>
-import { ref, defineProps, computed } from 'vue'
+import { ref, defineProps, defineEmits, computed } from 'vue'
 import "leaflet/dist/leaflet.css"
 import { LMap, LTileLayer, LMarker, LIcon, LTooltip } from "@vue-leaflet/vue-leaflet";
 import Logo from '@/assets/logo.png'
 
+const emit = defineEmits(['hovered'])
+
+function updateHovered(id) {
+  console.log(id)
+  emit('hovered', id)
+}
 
 const props = defineProps({
   sources: { type: Object, required: false, default: () => {} },
@@ -32,11 +44,9 @@ const zoom = ref(6)
 const markers = computed(() => {
   if (props.sources){
     let allDataPoints = []
-    let i = 0
     props.sources["sources"].forEach(source => {
       source["locations"].forEach(loc => {
         allDataPoints.push({id: source.id, text: source.text, coordinates: [loc.lat, loc.lng], size: props.hoveredSourceId == source.id ? [45,45] : [25,25] })
-        i += 1
       });
     });
     return allDataPoints

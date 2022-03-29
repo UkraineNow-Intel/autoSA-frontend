@@ -1,8 +1,10 @@
 <template>
-  <div class="dashboard-item"
+  <div
+    class="dashboard-item"
+    :class="hoveredSourceId == sourceId ? 'border-2 rounded border-yellow-600' : 'border-2 rounded'"
     @mouseover="updateHovered(sourceId)"
     @mouseleave="updateHovered(-1)"
-    :class="hoveredSourceId == sourceId ? 'border-2 rounded border-yellow-600' : 'border-2 rounded'">
+  >
     <div class="dashboard-image">
       <img src="https://placekitten.com/500/300" />
     </div>

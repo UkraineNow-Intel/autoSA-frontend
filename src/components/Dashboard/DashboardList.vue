@@ -2,15 +2,15 @@
   <el-row :gutter="10">
     <el-col v-for="source in sources['sources']" :key="source['id']" :xs="24" :sm="24" :md="12" :lg="12" :xl="8">
       <dashboard-item
-        @hovered="(a) => emit('hovered', a)"
-        :sourceId="source['id']"
-        :sourceInterface="source['interface']"
+        :source-id="source['id']"
+        :source-interface="source['interface']"
         :source="source['source']"
         :timestamp="source['timestamp']"
         :text="source['text']"
         :headline="source['headline']"
-        :hoveredSourceId="hoveredSourceId"
+        :hovered-source-id="hoveredSourceId"
         style="display: inline-block"
+        @hovered="(a) => emit('hovered', a)"
       ></dashboard-item>
     </el-col>
   </el-row>

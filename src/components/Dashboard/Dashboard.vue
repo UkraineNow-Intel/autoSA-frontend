@@ -24,10 +24,11 @@
       </div>
     </el-col>
     <el-col :xs="18" :sm="18" :md="10" :lg="12" :xl="12">
-      <dashboard-list 
+      <dashboard-list
+        :hovered-source-id="hoveredSourceId"
+        :sources="sources"
         @hovered="updateHovered"
-        :hoveredSourceId="hoveredSourceId"
-        :sources="sources"></dashboard-list>
+      ></dashboard-list>
     </el-col>
     <el-col :xs="24" :sm="24" :md="10" :lg="8" :xl="8">
       <div class="affix-container-map">
@@ -35,7 +36,8 @@
           <auto-sa-map
             style="width: 100%; max-width: 1000px; height: 60vh;"
             :sources="sources"
-            :hoveredSourceId="hoveredSourceId"
+            :hovered-source-id="hoveredSourceId"
+            @hovered="updateHovered"
           ></auto-sa-map>
         </el-affix>
       </div>
@@ -60,15 +62,15 @@ function updateHovered(id) {
 }
 
 onMounted(() => {
-    sources.value = AutoSaApi.getSources()
+  sources.value = AutoSaApi.getSources()
 })
 </script>
 
 <style scoped>
 .affix-container-settings,
 .affix-container-map {
-    text-align: center;
-    height: 100%;
-    border-radius: 4px;
+  text-align: center;
+  height: 100%;
+  border-radius: 4px;
 }
 </style>
