@@ -2,7 +2,7 @@
   <el-row :gutter="10">
     <el-col v-for="source in sources['sources']" :key="source['id']" :xs="24" :sm="24" :md="12" :lg="12" :xl="8">
       <dashboard-item
-        :interface="source['interface']"
+        :sourceInterface="source['interface']"
         :source="source['source']"
         :timestamp="source['timestamp']"
         :text="source['text']"
