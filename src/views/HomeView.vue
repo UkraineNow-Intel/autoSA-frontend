@@ -18,8 +18,8 @@
         </form>
       </div>
     </section>
-    <section>
-      <auto-sa-map style="width: 100vw; max-width: 1000px; height: 60vh; margin: 3em auto;" :sources="sources"></auto-sa-map>
+    <section style="padding: 2em">
+      <dashboard></dashboard>
     </section>
 
   </div>
@@ -28,13 +28,5 @@
 
 
 <script setup>
-import { ref, onMounted } from 'vue'
-import AutoSaApi from "../api/api";
-import AutoSaMap from '@/components/AutoSaMap.vue'
-
-let sources = ref({})
-
-onMounted(() => {
-  sources.value = AutoSaApi.getSources()
-})
+import Dashboard from '@/components/Dashboard/Dashboard.vue';
 </script>
