@@ -26,7 +26,7 @@
     <el-col :xs="18" :sm="18" :md="10" :lg="12" :xl="12">
       <dashboard-list
         :hovered-source-id="hoveredSourceId"
-        :sources="sources"
+        :sources="filteredSources"
         @hovered="updateHovered"
       ></dashboard-list>
     </el-col>
@@ -35,7 +35,7 @@
         <el-affix target=".affix-container-map" :offset="80">
           <auto-sa-map
             style="width: 100%; max-width: 1000px; height: 60vh;"
-            :sources="sources"
+            :sources="filteredSources"
             :hovered-source-id="hoveredSourceId"
             @hovered="updateHovered"
           ></auto-sa-map>
@@ -48,22 +48,46 @@
 
 
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, computed, defineProps } from 'vue'
 import AutoSaApi from "@/api/api";
 import AutoSaMap from '@/components/AutoSaMap.vue'
 import DashboardList from '@/components/Dashboard/DashboardList.vue';
 import DashboardSettingsBox from './DashboardSettingsBox.vue';
 
-let sources = ref({})
+let sources = ref({"sources": []})
 let hoveredSourceId = ref(1)
 
 function updateHovered(id) {
   hoveredSourceId.value = parseInt(id)
 }
 
+const props = defineProps({
+  searchQuery: { type: String, required: false, default: () => "" },
+})
+
 onMounted(() => {
   sources.value = AutoSaApi.getSources()
+  console.log(sources.value)
+  console.log(filteredSources.value)
 })
+
+const filteredSources = computed(() => {
+  if (props.searchQuery == ''){
+    return sources.value
+  }
+  if (sources.value){
+    let allDataPoints = []
+    sources.value["sources"].forEach(source => {
+      const currentQuery = props.searchQuery.toLowerCase()
+      if (currentQuery == '' || source["text"].toLowerCase().includes(currentQuery)){
+        allDataPoints.push(source)
+      }
+    });
+    return {'sources': allDataPoints}
+  }
+  return {'sources': []}
+})
+
 </script>
 
 <style scoped>
