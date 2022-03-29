@@ -7,7 +7,7 @@
       :max-zoom="10"
     />
     <l-marker v-for="marker in markers" :key="marker.id" :lat-lng="marker.coordinates">
-      <l-icon :icon-url="Logo" :icon-size="[30, 30]" />
+      <l-icon :icon-url="Logo" :icon-size="marker.size" />
       <l-tooltip>
         {{ marker.text }}
       </l-tooltip>
@@ -24,6 +24,7 @@ import Logo from '@/assets/logo.png'
 
 const props = defineProps({
   sources: { type: Object, required: false, default: () => {} },
+  hoveredSourceId: { type: Number, required: false, default: () => -1 },
 })
 
 const zoom = ref(6)
@@ -34,7 +35,7 @@ const markers = computed(() => {
     let i = 0
     props.sources["sources"].forEach(source => {
       source["locations"].forEach(loc => {
-        allDataPoints.push({id: i, text: source.text, coordinates: [loc.lat, loc.lng]})
+        allDataPoints.push({id: source.id, text: source.text, coordinates: [loc.lat, loc.lng], size: props.hoveredSourceId == source.id ? [45,45] : [25,25] })
         i += 1
       });
     });

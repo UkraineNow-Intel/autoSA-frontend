@@ -24,7 +24,10 @@
       </div>
     </el-col>
     <el-col :xs="18" :sm="18" :md="10" :lg="12" :xl="12">
-      <dashboard-list :sources="sources"></dashboard-list>
+      <dashboard-list 
+        @hovered="updateHovered"
+        :hoveredSourceId="hoveredSourceId"
+        :sources="sources"></dashboard-list>
     </el-col>
     <el-col :xs="24" :sm="24" :md="10" :lg="8" :xl="8">
       <div class="affix-container-map">
@@ -32,6 +35,7 @@
           <auto-sa-map
             style="width: 100%; max-width: 1000px; height: 60vh;"
             :sources="sources"
+            :hoveredSourceId="hoveredSourceId"
           ></auto-sa-map>
         </el-affix>
       </div>
@@ -49,6 +53,11 @@ import DashboardList from '@/components/Dashboard/DashboardList.vue';
 import DashboardSettingsBox from './DashboardSettingsBox.vue';
 
 let sources = ref({})
+let hoveredSourceId = ref(1)
+
+function updateHovered(id) {
+  hoveredSourceId.value = parseInt(id)
+}
 
 onMounted(() => {
     sources.value = AutoSaApi.getSources()
