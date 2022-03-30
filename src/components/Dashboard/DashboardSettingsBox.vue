@@ -7,6 +7,7 @@
         multiple
         placeholder="Select"
         style="width: 100%;"
+        disabled
       >
         <el-option
           v-for="item in options"
