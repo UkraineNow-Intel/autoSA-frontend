@@ -31,12 +31,14 @@
         :hovered-source-id="hoveredSourceId"
         :sources="filteredSources"
         @hovered="updateHovered"
+        @show-on-map="showIdOnMap"
       ></dashboard-list>
     </el-col>
     <el-col :xs="24" :sm="24" :md="10" :lg="8" :xl="8">
       <div class="affix-container-map">
         <el-affix target=".affix-container-map" style="width: 100%" :offset="80">
           <auto-sa-map
+            ref="mapinstance"
             style="width: 100%; max-width: 1000px; height: 60vh;"
             :sources="filteredSources"
             :hovered-source-id="hoveredSourceId"
@@ -58,11 +60,16 @@ import DashboardList from '@/components/Dashboard/DashboardList.vue';
 import DashboardSettingsBox from './DashboardSettingsBox.vue';
 import DashboardTimeSelector from './DashboardTimeSelector.vue';
 
-let sources = ref({"sources": []})
-let hoveredSourceId = ref(1)
+const sources = ref({"sources": []})
+const hoveredSourceId = ref(1)
+const mapinstance = ref(null)
 
 function updateHovered(id) {
   hoveredSourceId.value = parseInt(id)
+}
+
+function showIdOnMap(id) {
+  mapinstance.value.zoomToId(id)
 }
 
 const props = defineProps({

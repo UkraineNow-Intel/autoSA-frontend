@@ -26,7 +26,7 @@
       </div>
       <div class="dashboard-text flex-none lg:flex-1 lg:grow ">{{ text }}</div>
       <div class="dashboard-actions flex-none">
-        <el-button v-if="source">Show on Map</el-button>
+        <el-button v-if="hasLocations" @click="emit('showOnMap', sourceId)">Show on Map</el-button>
         <el-button>Pin</el-button>
       </div>
     </div>
@@ -38,7 +38,7 @@ import { defineProps, defineEmits } from 'vue'
 import { ElButton, ElImage } from 'element-plus'
 import moment from 'moment'
 
-const emit = defineEmits(['hovered'])
+const emit = defineEmits(['hovered', 'showOnMap'])
 
 function updateHovered(id) {
   emit('hovered', id)
@@ -51,7 +51,8 @@ defineProps({
   timestamp: { type: Number, required: false, default: undefined },
   hoveredSourceId: { type: Number, required: false, default: () => -1 },
   image: { type: String, required: false, default: () => null },
-  text: { type: String, required: true }
+  text: { type: String, required: true },
+  hasLocations: { type: Boolean, required: false, default: () => false }
 })
 
 </script>

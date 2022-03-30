@@ -10,8 +10,10 @@
         :headline="source['headline']"
         :image="source['image']"
         :hovered-source-id="hoveredSourceId"
+        :has-locations="source['locations'].length > 0"
         style="display: inline-block"
         @hovered="(a) => emit('hovered', a)"
+        @show-on-map="(a) => emit('showOnMap', a)"
       ></dashboard-item>
     </el-col>
   </el-row>
@@ -26,7 +28,7 @@ import { defineProps, defineEmits } from 'vue'
 import DashboardItem from '@/components/Dashboard/DashboardItem.vue';
 import { ElRow, ElCol } from 'element-plus'
 
-const emit = defineEmits(['hovered'])
+const emit = defineEmits(['hovered', 'showOnMap'])
 
 defineProps({
   sources: { type: Object, required: false, default: () => { } },

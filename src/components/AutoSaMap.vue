@@ -1,5 +1,5 @@
 <template>
-  <l-map ref="map" v-model:zoom="zoom" style="width: 100%; height: 100%" :center="[48.5, 32.2]">
+  <l-map ref="map" v-model:zoom="zoom" style="width: 100%; height: 100%" :center="center">
     <l-tile-layer
       url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
       layer-type="base"
@@ -22,7 +22,7 @@
 </template>
 
 <script setup>
-import { ref, defineProps, defineEmits, computed } from 'vue'
+import { ref, defineProps, defineEmits, defineExpose, computed } from 'vue'
 import "leaflet/dist/leaflet.css"
 import { LMap, LTileLayer, LMarker, LIcon, LTooltip } from "@vue-leaflet/vue-leaflet";
 import Logo from '@/assets/logo.png'
@@ -39,6 +39,25 @@ const props = defineProps({
 })
 
 const zoom = ref(6)
+const center = ref([48.5, 32.2])
+
+function zoomToId(id) {
+  const locations = getSourceLocations(id)
+  if (locations.length > 0){
+    zoom.value = 10
+    center.value = [locations[0].lat, locations[0].lng]
+  }
+}
+defineExpose({ zoomToId })
+
+function getSourceLocations(id){
+   for(var i = 0; i < props.sources["sources"].length; i++) {
+      if (props.sources["sources"][i]["id"] == id){
+        return props.sources["sources"][i]["locations"]
+      }
+   }
+   return 
+}
 
 const markers = computed(() => {
   if (props.sources){
