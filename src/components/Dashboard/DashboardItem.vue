@@ -5,27 +5,29 @@
     @mouseover="updateHovered(sourceId)"
     @mouseleave="updateHovered(-1)"
   >
-    <div class="dashboard-image">
-      <img src="https://placekitten.com/500/300" />
-    </div>
-    <div class="dashboard-meta">
-      <div v-if="source"><span>Posted:</span> <span>{{ source }}</span> <span v-if="sourceInterface">({{ sourceInterface }})</span></div>
-      <div v-if="timestamp"><span>Time:</span> <span>{{ timestamp }}</span></div>
-      <div v-if="sourceId"><span>Id:</span> <span>{{ sourceId }}</span></div>
-    </div>
-    <div class="dashboard-text">
-      {{ text }}
-    </div>
-    <div class="dashboard-actions">
-      <el-button v-if="source">Show on Map</el-button>
-      <el-button>Pin</el-button>
+    <div class="flex flex-1 flex-col" style="height: 100%">
+      <div v-if="image" class="dashboard-image flex-none">
+        <el-image :src="image" fit="cover" />
+      </div>
+      <div class="dashboard-meta flex-none">
+        <div v-if="source"><span>Posted:</span> <span>{{ source }}</span> <span v-if="sourceInterface">({{ sourceInterface }})</span></div>
+        <div v-if="timestamp"><span>Time:</span> <span>{{ timestamp }}</span></div>
+        <div v-if="sourceId"><span>Id:</span> <span>{{ sourceId }}</span></div>
+      </div>
+      <div class="dashboard-text grow">
+        {{ text }}
+      </div>
+      <div class="dashboard-actions flex-none">
+        <el-button v-if="source">Show on Map</el-button>
+        <el-button>Pin</el-button>
+      </div>
     </div>
   </div>
 </template>
 
 <script setup>
 import { defineProps, defineEmits } from 'vue'
-import { ElButton } from 'element-plus'
+import { ElButton, ElImage } from 'element-plus'
 
 const emit = defineEmits(['hovered'])
 
@@ -35,11 +37,11 @@ function updateHovered(id) {
 
 defineProps({
   sourceId: { type: Number, required: true },
-  image: { type: String, required: false, default: undefined },
   source: { type: String, required: false, default: undefined },
   sourceInterface: { type: String, required: false, default: undefined },
   timestamp: { type: Number, required: false, default: undefined },
   hoveredSourceId: { type: Number, required: false, default: () => -1 },
+  image: { type: String, required: false, default: () => null },
   text: { type: String, required: true }
 })
 </script>
@@ -48,16 +50,22 @@ defineProps({
 
 .dashboard-item {
   @apply bg-slate-200 p-5 m-3;
-  max-width: 600px;
+  width: 100%;
+  height: 500px;
 }
-.dashboard-image img {
-  width: 100%
+.dashboard-image .el-image {
+  height: 100px;
+  width: 100%;
 }
 
 .dashboard-meta {
   padding: 10px 0;
   font-size: small;
   color: #333333;
+}
+.dashboard-text {
+  height: 100%;
+  overflow: auto;
 }
 
 .dashboard-actions {

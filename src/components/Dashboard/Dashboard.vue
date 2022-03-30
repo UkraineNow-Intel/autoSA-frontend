@@ -67,8 +67,6 @@ const props = defineProps({
 
 onMounted(() => {
   sources.value = AutoSaApi.getSources()
-  console.log(sources.value)
-  console.log(filteredSources.value)
 })
 
 const filteredSources = computed(() => {
