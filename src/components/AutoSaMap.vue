@@ -30,7 +30,6 @@ import Logo from '@/assets/logo.png'
 const emit = defineEmits(['hovered'])
 
 function updateHovered(id) {
-  console.log(id)
   emit('hovered', id)
 }
 

@@ -2,7 +2,7 @@
   <el-row :gutter="10">
     <el-col :xs="6" :sm="6" :md="4" :lg="4" :xl="4">
       <div class="affix-container-settings">
-        <el-affix target=".affix-container-settings" :offset="80">
+        <el-affix target=".affix-container-settings" :offset="80" style="text-align: left;">
           <dashboard-settings-box
             name="Websites"
             :options="[
@@ -20,6 +20,9 @@
               { label: 'Other Sites', value: 'other' },
             ]"
           ></dashboard-settings-box>
+          <hr style="max-width: 50%; margin: 10px auto;">
+          <dashboard-time-selector>
+          </dashboard-time-selector>
         </el-affix>
       </div>
     </el-col>
@@ -53,6 +56,7 @@ import AutoSaApi from "@/api/api";
 import AutoSaMap from '@/components/AutoSaMap.vue'
 import DashboardList from '@/components/Dashboard/DashboardList.vue';
 import DashboardSettingsBox from './DashboardSettingsBox.vue';
+import DashboardTimeSelector from './DashboardTimeSelector.vue';
 
 let sources = ref({"sources": []})
 let hoveredSourceId = ref(1)
