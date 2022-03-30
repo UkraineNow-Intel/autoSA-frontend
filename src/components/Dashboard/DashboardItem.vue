@@ -10,13 +10,21 @@
         <el-image :src="image" fit="cover" />
       </div>
       <div class="dashboard-meta flex-none">
-        <div v-if="source"><span>Posted:</span> <span>{{ source }}</span> <span v-if="sourceInterface">({{ sourceInterface }})</span></div>
-        <div v-if="timestamp"><span>Time:</span> <span>{{ timestamp }}</span></div>
-        <div v-if="sourceId"><span>Id:</span> <span>{{ sourceId }}</span></div>
+        <div v-if="source">
+          <span>Posted:</span>
+          <span>{{ source }}</span>
+          <span v-if="sourceInterface">({{ sourceInterface }})</span>
+        </div>
+        <div v-if="timestamp">
+          <span>Time:</span>
+          <span>{{ moment(timestamp * 1000).format("ddd MMM DD, YYYY [at] HH:mm a") }}</span>
+        </div>
+        <div v-if="sourceId">
+          <span>Id:</span>
+          <span>{{ sourceId }}</span>
+        </div>
       </div>
-      <div class="dashboard-text grow">
-        {{ text }}
-      </div>
+      <div class="dashboard-text grow">{{ text }}</div>
       <div class="dashboard-actions flex-none">
         <el-button v-if="source">Show on Map</el-button>
         <el-button>Pin</el-button>
@@ -28,6 +36,7 @@
 <script setup>
 import { defineProps, defineEmits } from 'vue'
 import { ElButton, ElImage } from 'element-plus'
+import moment from 'moment'
 
 const emit = defineEmits(['hovered'])
 
@@ -44,10 +53,10 @@ defineProps({
   image: { type: String, required: false, default: () => null },
   text: { type: String, required: true }
 })
+
 </script>
 
 <style scoped>
-
 .dashboard-item {
   @apply bg-slate-200 p-5 m-3;
   width: 100%;
@@ -63,6 +72,10 @@ defineProps({
   font-size: small;
   color: #333333;
 }
+
+.dashboard-meta span:first-child {
+  margin-right: 6px;
+}
 .dashboard-text {
   height: 100%;
   overflow: auto;
@@ -71,5 +84,4 @@ defineProps({
 .dashboard-actions {
   padding: 10px 0;
 }
-
 </style>

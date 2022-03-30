@@ -12,6 +12,7 @@
     "axios": "^0.26.1",
     "element-plus": "^2.1.4",
     "leaflet": "^1.7.1",
+    "moment": "^2.29.1",
     "unplugin-element-plus": "^0.3.2",
     "vue": "^3.2.25",
     "vue-router": "4"

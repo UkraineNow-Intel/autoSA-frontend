@@ -16,7 +16,7 @@
 </template>
 
 <script setup>
-import {ref, defineProps, onMounted} from 'vue'
+import {ref } from 'vue'
 import { ElDatePicker } from 'element-plus'
 
 const value2 = ref('')
