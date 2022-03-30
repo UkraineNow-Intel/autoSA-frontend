@@ -2,7 +2,7 @@
   <el-row :gutter="10">
     <el-col :xs="6" :sm="6" :md="4" :lg="4" :xl="4">
       <div class="affix-container-settings">
-        <el-affix target=".affix-container-settings" :offset="80" style="text-align: left;">
+        <el-affix target=".affix-container-settings" :offset="80" style="text-align: left; width: 100%">
           <dashboard-settings-box
             name="Websites"
             :options="[
@@ -35,7 +35,7 @@
     </el-col>
     <el-col :xs="24" :sm="24" :md="10" :lg="8" :xl="8">
       <div class="affix-container-map">
-        <el-affix target=".affix-container-map" :offset="80">
+        <el-affix target=".affix-container-map" style="width: 100%" :offset="80">
           <auto-sa-map
             style="width: 100%; max-width: 1000px; height: 60vh;"
             :sources="filteredSources"

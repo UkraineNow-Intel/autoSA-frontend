@@ -22,7 +22,7 @@
         </form>
       </div>
     </section>
-    <section style="padding: 2em">
+    <section class="p-2 md:p-6">
       <dashboard :search-query="searchQuery"></dashboard>
     </section>
 

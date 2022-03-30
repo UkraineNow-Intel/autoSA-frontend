@@ -13,7 +13,7 @@
         <div v-if="source">
           <span>Posted:</span>
           <span>{{ source }}</span>
-          <span v-if="sourceInterface">({{ sourceInterface }})</span>
+          <span v-if="sourceInterface"> ({{ sourceInterface }})</span>
         </div>
         <div v-if="timestamp">
           <span>Time:</span>
@@ -24,7 +24,7 @@
           <span>{{ sourceId }}</span>
         </div>
       </div>
-      <div class="dashboard-text grow">{{ text }}</div>
+      <div class="dashboard-text flex-none lg:flex-1 lg:grow ">{{ text }}</div>
       <div class="dashboard-actions flex-none">
         <el-button v-if="source">Show on Map</el-button>
         <el-button>Pin</el-button>
@@ -58,9 +58,9 @@ defineProps({
 
 <style scoped>
 .dashboard-item {
-  @apply bg-slate-200 p-5 m-3;
+  @apply bg-slate-200 p-5 m-3 lg:h-[28rem];
   width: 100%;
-  height: 500px;
+  max-height: 90vh;
 }
 .dashboard-image .el-image {
   height: 100px;
