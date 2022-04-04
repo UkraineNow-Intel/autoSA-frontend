@@ -1,5 +1,6 @@
 <template>
   <div
+    ref="item"
     class="dashboard-item"
     :class="hoveredSourceId == sourceId ? 'border-2 rounded border-yellow-600' : 'border-2 rounded'"
     @mouseover="updateHovered(sourceId)"
@@ -34,11 +35,13 @@
 </template>
 
 <script setup>
-import { defineProps, defineEmits } from 'vue'
+import { ref, defineProps, defineEmits, defineExpose } from 'vue'
 import { ElButton, ElImage } from 'element-plus'
 import moment from 'moment'
 
 const emit = defineEmits(['hovered', 'showOnMap'])
+
+const item = ref(null)
 
 function updateHovered(id) {
   emit('hovered', id)
@@ -54,6 +57,14 @@ defineProps({
   text: { type: String, required: true },
   hasLocations: { type: Boolean, required: false, default: () => false }
 })
+
+
+function scrollToElement() {
+  item.value.scrollIntoView({'behavior': 'smooth'})
+}
+
+defineExpose({ scrollToElement })
+
 
 </script>
 

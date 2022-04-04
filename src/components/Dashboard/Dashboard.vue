@@ -28,6 +28,7 @@
     </el-col>
     <el-col :xs="18" :sm="18" :md="10" :lg="12" :xl="12">
       <dashboard-list
+        ref="dashboardlistinstance"
         :hovered-source-id="hoveredSourceId"
         :sources="filteredSources"
         @hovered="updateHovered"
@@ -43,6 +44,7 @@
             :sources="filteredSources"
             :hovered-source-id="hoveredSourceId"
             @hovered="updateHovered"
+            @marker-clicked="scrollSourceIntoView"
           ></auto-sa-map>
         </el-affix>
       </div>
@@ -63,10 +65,16 @@ import DashboardTimeSelector from './DashboardTimeSelector.vue';
 const sources = ref({"sources": []})
 const hoveredSourceId = ref(1)
 const mapinstance = ref(null)
+const dashboardlistinstance = ref(null)
 
 function updateHovered(id) {
   hoveredSourceId.value = parseInt(id)
 }
+
+function scrollSourceIntoView(id) {
+  dashboardlistinstance.value.scrollSourceIntoView(id)
+}
+
 
 function showIdOnMap(id) {
   mapinstance.value.zoomToId(id)
