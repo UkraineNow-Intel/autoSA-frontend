@@ -75,7 +75,25 @@ class AutoSaApi {
      */
     changeSource(id, data) {
         return http.patch(`/api/sources/${id}`, data).catch(e => {
-            if (e.response.status == 403){
+            if (e.response.status == 403) {
+                router.push({ name: 'login' })
+            } else {
+                ElNotification({
+                    title: 'Error',
+                    message: `Could not update source \n ${e}`,
+                    type: 'error',
+                })
+            }
+        })
+    }
+
+    /**
+     * deletes a source with ID
+     * @param {Number} id: ID of the source to delete
+     */
+    deleteSource(id) {
+        return http.delete(`/api/sources/${id}`).catch(e => {
+            if (e.response.status == 403) {
                 router.push({ name: 'login' })
             } else {
                 ElNotification({

@@ -29,6 +29,7 @@
       <div class="dashboard-actions flex-none">
         <el-button v-if="hasLocations" @click="emit('showOnMap', sourceId)">Show on Map</el-button>
         <el-button :loading="pinningLoading" @click="togglePin">{{ pinned ? 'Unpin' : 'Pin' }}</el-button>
+        <el-button :loading="deleteLoading" @click="deleteItem">Delete Item</el-button>
       </div>
     </div>
   </div>
@@ -44,6 +45,7 @@ const emit = defineEmits(['hovered', 'showOnMap'])
 
 const item = ref(null)
 const pinningLoading = ref(false)
+const deleteLoading = ref(false)
 const sourceStore = useSource()
 
 function updateHovered(id) {
@@ -66,6 +68,12 @@ async function togglePin() {
   pinningLoading.value = true
   await sourceStore.changeSource(props.sourceId, { 'pinned': !props.pinned })
   pinningLoading.value = false
+}
+
+async function deleteItem() {
+  deleteLoading.value = true
+  await sourceStore.deleteSource(props.sourceId)
+  deleteLoading.value = false
 }
 
 function scrollToElement() {

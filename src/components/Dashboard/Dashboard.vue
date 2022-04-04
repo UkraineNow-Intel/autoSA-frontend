@@ -7,6 +7,8 @@
           :offset="80"
           style="text-align: left; width: 100%"
         >
+          <el-button @click="addSource">Add Source</el-button>
+          <hr style="max-width: 50%; margin: 10px auto;" />
           <dashboard-settings-box
             name="Websites"
             :options="[
@@ -30,6 +32,7 @@
       </div>
     </el-col>
     <el-col :xs="18" :sm="18" :md="10" :lg="12" :xl="12">
+      <dashboard-item-editor v-if="showEditor.display" :default="showEditor.default"></dashboard-item-editor>
       <dashboard-list
         ref="dashboardlistinstance"
         :hovered-source-id="hoveredSourceId"
@@ -65,12 +68,17 @@ import DashboardSettingsBox from './DashboardSettingsBox.vue';
 import DashboardTimeSelector from './DashboardTimeSelector.vue';
 import { storeToRefs } from 'pinia'
 import { useSource } from '@/stores/sources'
+import DashboardItemEditor from './DashboardItemEditor.vue'
 
 const hoveredSourceId = ref(1)
 const mapinstance = ref(null)
 const dashboardlistinstance = ref(null)
 const sourceStore = useSource()
 const { sources } = storeToRefs(sourceStore)
+const showEditor = ref({
+  display: false,
+  default: {}
+})
 
 function updateHovered(id) {
   hoveredSourceId.value = parseInt(id)
@@ -78,6 +86,13 @@ function updateHovered(id) {
 
 function scrollSourceIntoView(id) {
   dashboardlistinstance.value.scrollSourceIntoView(id)
+}
+
+function addSource() {
+  showEditor.value = {
+    display: true,
+    default: {}
+  }
 }
 
 
