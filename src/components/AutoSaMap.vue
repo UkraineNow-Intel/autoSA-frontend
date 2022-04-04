@@ -21,6 +21,7 @@
         </l-tooltip>
       </l-marker>
     </l-map>
+    {{ center }}
   </div>
 </template>
 
@@ -76,9 +77,11 @@ const markers = computed(() => {
   if (props.sources){
     let allDataPoints = []
     props.sources["sources"].forEach(source => {
-      source["locations"].forEach(loc => {
-        allDataPoints.push({id: source.id, text: source.text, coordinates: [loc.lat, loc.lng], size: props.hoveredSourceId == source.id ? [45,45] : [25,25] })
-      });
+      if ("locations" in source){
+        source["locations"].forEach(loc => {
+          allDataPoints.push({id: source.id, text: source.text, coordinates: [loc.lat, loc.lng], size: props.hoveredSourceId == source.id ? [45,45] : [25,25] })
+        });
+      }
     });
     return allDataPoints
   }

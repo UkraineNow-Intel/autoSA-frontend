@@ -18,7 +18,7 @@
         </div>
         <div v-if="timestamp">
           <span>Time:</span>
-          <span>{{ moment(timestamp * 1000).format("ddd MMM DD, YYYY [at] HH:mm a") }}</span>
+          <span>{{ moment(timestamp).format("ddd MMM DD, YYYY [at] HH:mm a") }}</span>
         </div>
         <div v-if="sourceId">
           <span>Id:</span>
@@ -28,7 +28,7 @@
       <div class="dashboard-text flex-none lg:flex-1 lg:grow ">{{ text }}</div>
       <div class="dashboard-actions flex-none">
         <el-button v-if="hasLocations" @click="emit('showOnMap', sourceId)">Show on Map</el-button>
-        <el-button>Pin</el-button>
+        <el-button @click="togglePin">{{ pinned ? 'Unpin' : 'Pin'}}</el-button>
       </div>
     </div>
   </div>
@@ -38,6 +38,7 @@
 import { ref, defineProps, defineEmits, defineExpose } from 'vue'
 import { ElButton, ElImage } from 'element-plus'
 import moment from 'moment'
+import AutoSaApi from "@/api/api";
 
 const emit = defineEmits(['hovered', 'showOnMap'])
 
@@ -47,17 +48,21 @@ function updateHovered(id) {
   emit('hovered', id)
 }
 
-defineProps({
+const props = defineProps({
   sourceId: { type: Number, required: true },
   source: { type: String, required: false, default: undefined },
   sourceInterface: { type: String, required: false, default: undefined },
-  timestamp: { type: Number, required: false, default: undefined },
+  timestamp: { type: String, required: false, default: undefined },
   hoveredSourceId: { type: Number, required: false, default: () => -1 },
   image: { type: String, required: false, default: () => null },
   text: { type: String, required: true },
-  hasLocations: { type: Boolean, required: false, default: () => false }
+  hasLocations: { type: Boolean, required: false, default: () => false },
+  pinned: { type: Boolean, required: false, default: () => false }
 })
 
+function togglePin() {
+  AutoSaApi.changeSource(props.sourceId, {'pinned': !props.pinned}).then((t) => console.log(t))
+}
 
 function scrollToElement() {
   item.value.scrollIntoView({'behavior': 'smooth'})

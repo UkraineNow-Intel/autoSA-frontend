@@ -11,6 +11,11 @@ export default defineConfig({
         target: 'http://ec2-44-197-226-135.compute-1.amazonaws.com/api',
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/api/, '')
+      },
+      '/translation': {
+        target: 'http://ec2-44-197-226-135.compute-1.amazonaws.com/translation',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/translation/, '')
       }
     }
   },

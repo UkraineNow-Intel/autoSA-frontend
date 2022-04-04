@@ -2,7 +2,11 @@
   <el-row :gutter="10">
     <el-col :xs="6" :sm="6" :md="4" :lg="4" :xl="4">
       <div class="affix-container-settings">
-        <el-affix target=".affix-container-settings" :offset="80" style="text-align: left; width: 100%">
+        <el-affix
+          target=".affix-container-settings"
+          :offset="80"
+          style="text-align: left; width: 100%"
+        >
           <dashboard-settings-box
             name="Websites"
             :options="[
@@ -20,9 +24,8 @@
               { label: 'Other Sites', value: 'other' },
             ]"
           ></dashboard-settings-box>
-          <hr style="max-width: 50%; margin: 10px auto;">
-          <dashboard-time-selector>
-          </dashboard-time-selector>
+          <hr style="max-width: 50%; margin: 10px auto;" />
+          <dashboard-time-selector></dashboard-time-selector>
         </el-affix>
       </div>
     </el-col>
@@ -62,7 +65,7 @@ import DashboardList from '@/components/Dashboard/DashboardList.vue';
 import DashboardSettingsBox from './DashboardSettingsBox.vue';
 import DashboardTimeSelector from './DashboardTimeSelector.vue';
 
-const sources = ref({"sources": []})
+const sources = ref({ "sources": [] })
 const hoveredSourceId = ref(1)
 const mapinstance = ref(null)
 const dashboardlistinstance = ref(null)
@@ -84,25 +87,29 @@ const props = defineProps({
   searchQuery: { type: String, required: false, default: () => "" },
 })
 
+function setSources(response) {
+  sources.value = { "sources": response.data }
+}
+
 onMounted(() => {
-  sources.value = AutoSaApi.getSources()
+  AutoSaApi.getSources().then(setSources)
 })
 
 const filteredSources = computed(() => {
-  if (props.searchQuery == ''){
+  if (props.searchQuery == '') {
     return sources.value
   }
-  if (sources.value){
+  if (sources.value) {
     let allDataPoints = []
     sources.value["sources"].forEach(source => {
       const currentQuery = props.searchQuery.toLowerCase()
-      if (currentQuery == '' || source["text"].toLowerCase().includes(currentQuery)){
+      if (currentQuery == '' || source["text"].toLowerCase().includes(currentQuery)) {
         allDataPoints.push(source)
       }
     });
-    return {'sources': allDataPoints}
+    return { 'sources': allDataPoints }
   }
-  return {'sources': []}
+  return { 'sources': [] }
 })
 
 </script>
