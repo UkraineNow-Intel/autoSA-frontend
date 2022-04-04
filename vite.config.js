@@ -8,12 +8,14 @@ export default defineConfig({
     proxy: {
       // with options
       '/api': {
-        target: 'http://ec2-44-197-226-135.compute-1.amazonaws.com/api',
+        target: 'http://127.0.0.1:8000/api',
+        //target: 'http://ec2-44-197-226-135.compute-1.amazonaws.com/api',
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/api/, '')
       },
       '/translation': {
-        target: 'http://ec2-44-197-226-135.compute-1.amazonaws.com/translation',
+        target: 'http://127.0.0.1:8000/translation',
+        //target: 'http://ec2-44-197-226-135.compute-1.amazonaws.com/translation',
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/translation/, '')
       }

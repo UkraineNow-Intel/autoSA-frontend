@@ -14,7 +14,7 @@
         <div v-if="source">
           <span>Posted:</span>
           <span>{{ source }}</span>
-          <span v-if="sourceInterface"> ({{ sourceInterface }})</span>
+          <span v-if="sourceInterface">({{ sourceInterface }})</span>
         </div>
         <div v-if="timestamp">
           <span>Time:</span>
@@ -25,10 +25,10 @@
           <span>{{ sourceId }}</span>
         </div>
       </div>
-      <div class="dashboard-text flex-none lg:flex-1 lg:grow ">{{ text }}</div>
+      <div class="dashboard-text flex-none lg:flex-1 lg:grow">{{ text }}</div>
       <div class="dashboard-actions flex-none">
         <el-button v-if="hasLocations" @click="emit('showOnMap', sourceId)">Show on Map</el-button>
-        <el-button @click="togglePin">{{ pinned ? 'Unpin' : 'Pin' }}</el-button>
+        <el-button :loading="pinningLoading" @click="togglePin">{{ pinned ? 'Unpin' : 'Pin' }}</el-button>
       </div>
     </div>
   </div>
@@ -38,11 +38,13 @@
 import { ref, defineProps, defineEmits, defineExpose } from 'vue'
 import { ElButton, ElImage } from 'element-plus'
 import moment from 'moment'
-import AutoSaApi from "@/api/api";
+import { useSource } from '@/stores/sources'
 
 const emit = defineEmits(['hovered', 'showOnMap'])
 
 const item = ref(null)
+const pinningLoading = ref(false)
+const sourceStore = useSource()
 
 function updateHovered(id) {
   emit('hovered', id)
@@ -60,12 +62,14 @@ const props = defineProps({
   pinned: { type: Boolean, required: false, default: () => false }
 })
 
-function togglePin() {
-  AutoSaApi.changeSource(props.sourceId, {'pinned': !props.pinned}).then((t) => console.log(t))
+async function togglePin() {
+  pinningLoading.value = true
+  await sourceStore.changeSource(props.sourceId, { 'pinned': !props.pinned })
+  pinningLoading.value = false
 }
 
 function scrollToElement() {
-  item.value.scrollIntoView({'behavior': 'smooth'})
+  item.value.scrollIntoView({ 'behavior': 'smooth' })
 }
 
 defineExpose({ scrollToElement })
