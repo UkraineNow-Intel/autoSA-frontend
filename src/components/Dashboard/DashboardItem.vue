@@ -28,7 +28,7 @@
       <div class="dashboard-text flex-none lg:flex-1 lg:grow ">{{ text }}</div>
       <div class="dashboard-actions flex-none">
         <el-button v-if="hasLocations" @click="emit('showOnMap', sourceId)">Show on Map</el-button>
-        <el-button @click="togglePin">{{ pinned ? 'Unpin' : 'Pin'}}</el-button>
+        <el-button @click="togglePin">{{ pinned ? 'Unpin' : 'Pin' }}</el-button>
       </div>
     </div>
   </div>

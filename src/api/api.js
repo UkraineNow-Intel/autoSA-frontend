@@ -1,5 +1,5 @@
 import http from "./client";
-import sourceData from "./mockdata"
+// import sourceData from "./mockdata"
 
 class AutoSaApi {
     /**
@@ -23,7 +23,7 @@ class AutoSaApi {
      * create new source providing data
      * @param {Object} data: e.g. {"tags": [], "interface": "website", "source": "@Blah", "headline": "", "text": "Щось трапилося", "language": "ua", "timestamp": "2022-04-01T20:25:00Z", "pinned": "true", "translations": []}
      */
-     createSource() {
+     createSource(data) {
         // return sourceData
         return http.post(`/api/sources`, data)
     }
