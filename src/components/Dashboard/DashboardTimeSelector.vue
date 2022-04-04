@@ -10,6 +10,7 @@
         start-placeholder="Start date"
         end-placeholder="End date"
         style="width: 100%"
+        disabled
       />
     </div>
   </div>
