@@ -59,16 +59,18 @@
 
 <script setup>
 import { ref, onMounted, computed, defineProps } from 'vue'
-import AutoSaApi from "@/api/api";
 import AutoSaMap from '@/components/AutoSaMap.vue'
 import DashboardList from '@/components/Dashboard/DashboardList.vue';
 import DashboardSettingsBox from './DashboardSettingsBox.vue';
 import DashboardTimeSelector from './DashboardTimeSelector.vue';
+import { storeToRefs } from 'pinia'
+import { useSource } from '@/stores/sources'
 
-const sources = ref({ "sources": [] })
 const hoveredSourceId = ref(1)
 const mapinstance = ref(null)
 const dashboardlistinstance = ref(null)
+const sourceStore = useSource()
+const { sources } = storeToRefs(sourceStore)
 
 function updateHovered(id) {
   hoveredSourceId.value = parseInt(id)
@@ -87,29 +89,26 @@ const props = defineProps({
   searchQuery: { type: String, required: false, default: () => "" },
 })
 
-function setSources(response) {
-  sources.value = { "sources": response.data }
-}
 
 onMounted(() => {
-  AutoSaApi.getSources().then(setSources)
+  sourceStore.getSourcesFromApi()
 })
 
 const filteredSources = computed(() => {
   if (props.searchQuery == '') {
     return sources.value
   }
-  if (sources.value) {
+  if (sources.value && sources.value.length > 0) {
     let allDataPoints = []
-    sources.value["sources"].forEach(source => {
+    sources.value.forEach(source => {
       const currentQuery = props.searchQuery.toLowerCase()
       if (currentQuery == '' || source["text"].toLowerCase().includes(currentQuery)) {
         allDataPoints.push(source)
       }
     });
-    return { 'sources': allDataPoints }
+    return allDataPoints
   }
-  return { 'sources': [] }
+  return []
 })
 
 </script>

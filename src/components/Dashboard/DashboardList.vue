@@ -1,6 +1,6 @@
 <template>
   <el-row :gutter="10" style="margin: 10px">
-    <el-col v-for="source in sources['sources']" :key="source['id']" :xs="24" :sm="24" :md="12" :lg="12" :xl="8">
+    <el-col v-for="source in sources" :key="source['id']" :xs="24" :sm="24" :md="12" :lg="12" :xl="8">
       <dashboard-item
         :ref="setItemRef"
         :source-id="source['id']"
@@ -35,7 +35,7 @@ const dashboarditemRefs = ref([])
 const emit = defineEmits(['hovered', 'showOnMap'])
 
 const props = defineProps({
-  sources: { type: Object, required: false, default: () => { } },
+  sources: { type: Array, required: false, default: () => [] },
   hoveredSourceId: { type: Number, required: false, default: () => -1 },
 })
 
@@ -50,7 +50,7 @@ onBeforeUpdate(() => {
 })
 
 function scrollSourceIntoView(id) {
-  var index = props.sources['sources'].map((e) => { return e.id; }).indexOf(id);
+  var index = props.sources.map((e) => { return e.id; }).indexOf(id);
   dashboarditemRefs.value[index].scrollToElement()
 }
 
