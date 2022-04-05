@@ -41,7 +41,7 @@
           :loading="pinningLoading"
           @click="togglePin"
         >{{ source.pinned ? 'Unpin' : 'Pin' }}</el-button>
-        <el-button :loading="deleteLoading" @click="deleteItem">Delete Item</el-button>
+        <el-button :loading="deleteLoading" @click="confirmDelete">Delete Item</el-button>
       </div>
     </div>
   </div>
@@ -53,6 +53,7 @@ import { ElButton, ElImage } from 'element-plus'
 import moment from 'moment'
 import { useSource } from '@/stores/sources'
 import DashboardItemTags from './DashboardItemTags.vue';
+import { ElMessage, ElMessageBox } from 'element-plus'
 
 const emit = defineEmits(['hovered', 'showOnMap'])
 
@@ -76,10 +77,28 @@ async function togglePin() {
   pinningLoading.value = false
 }
 
+
+async function confirmDelete() {
+  ElMessageBox.confirm(
+    'Do you really want to delete source ' + props.source["id"] + ' ?',
+    'Delete Source',
+    {
+      confirmButtonText: 'Delte Source',
+      cancelButtonText: 'Cancel',
+      type: 'warning',
+    }
+  )
+    .then(deleteItem)
+}
+
 async function deleteItem() {
   deleteLoading.value = true
   await sourceStore.deleteSource(props.source["id"])
   deleteLoading.value = false
+  ElMessage({
+    type: 'success',
+    message: 'Source ' + props.source["id"] + ' deleted',
+  })
 }
 
 function scrollToElement() {

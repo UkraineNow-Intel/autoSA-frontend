@@ -11,7 +11,7 @@
       ></dashboard-item>
     </el-col>
     <el-col v-if="sources.length == 0" :xs="24">
-      <el-alert title="Sorry, this list is empty. Maybe you should change the filters?" type="info" center show-icon :closable="false"/>
+      <el-alert title="Sorry, this list is empty. Maybe you should change the filters?" type="info" center show-icon :closable="false" />
     </el-col>
   </el-row>
 

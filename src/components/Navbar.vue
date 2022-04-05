@@ -14,7 +14,7 @@
         <router-link class="nav-link" :to="{ name: 'home' }">Research</router-link>
         <router-link class="nav-link" :to="{ name: 'translator' }">Translator</router-link>
         <router-link v-if="!authStore.isLoggedIn" class="nav-link" :to="{ name: 'login' }">Login</router-link>
-        <a v-if="authStore.isLoggedIn" style="cursor:pointer" type="info" class="nav-link" @click="logout">Logout</a>
+        <a v-if="authStore.isLoggedIn" style="cursor:pointer" type="info" class="nav-link" @click="confirmLogout">Logout</a>
       </div>
     </div>
   </div>
@@ -23,9 +23,25 @@
 <script setup>
 import { RouterLink } from 'vue-router';
 import { useAuth } from '@/stores/auth'
+import { ElMessageBox } from 'element-plus'
 const authStore = useAuth()
 
-function logout() {
+function confirmLogout() {
+  ElMessageBox.confirm(
+    'Do you really want to logout?',
+    'Logout',
+    {
+      confirmButtonText: 'Logout',
+      cancelButtonText: 'Cancel',
+      type: 'warning',
+    }
+  ).then(() => {
+      logout()
+    })
+}
+
+
+async function logout() {
   authStore.logout()
 }
 </script>
