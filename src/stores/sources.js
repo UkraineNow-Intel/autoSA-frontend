@@ -9,6 +9,17 @@ export const useSource = defineStore('source', {
       sourceIdDict: {}
     }
   },
+  getters: {
+    tags(state) {
+      let alltags = new Set()
+      state.sources.forEach(element => {
+        element.tags.forEach(tag => {
+          alltags.add(tag)          
+        });
+      });
+      return Array.from(alltags)
+    } 
+  },
   actions: {
     async getSourcesFromApi() {
       const data = await AutoSaApi.getSources().then((response) => { return response.data })

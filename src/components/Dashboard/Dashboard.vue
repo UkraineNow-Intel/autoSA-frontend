@@ -46,8 +46,16 @@
         @show-on-map="showIdOnMap"
       ></dashboard-list>
     </el-col>
-    <el-col :xs="24" :sm="24" :md="10" :lg="8" :xl="8">
-      <div class="affix-container-map">
+    <el-col :xs="24" :sm="24" :md="10" :lg="8" :xl="8" style="border-left: 1px solid lightgray;">
+      <dashboard-list-quick-filter @update-filter="(options) => quickFilter = options"></dashboard-list-quick-filter>
+      <dashboard-list
+        ref="dashboardlistinstance"
+        :hovered-source-id="hoveredSourceId"
+        :sources="pinnedSources"
+        @hovered="updateHovered"
+        @show-on-map="showIdOnMap"
+      ></dashboard-list>
+      <!--<div class="affix-container-map">
         <el-affix target=".affix-container-map" style="width: 100%" :offset="80">
           <auto-sa-map
             ref="mapinstance"
@@ -58,7 +66,7 @@
             @marker-clicked="scrollSourceIntoView"
           ></auto-sa-map>
         </el-affix>
-      </div>
+      </div>-->
     </el-col>
   </el-row>
 </template>
@@ -67,13 +75,14 @@
 
 <script setup>
 import { ref, onMounted, computed, defineProps } from 'vue'
-import AutoSaMap from '@/components/AutoSaMap.vue'
+// import AutoSaMap from '@/components/AutoSaMap.vue'
 import DashboardList from '@/components/Dashboard/DashboardList.vue';
 import DashboardSettingsBox from './DashboardSettingsBox.vue';
 import DashboardTimeSelector from './DashboardTimeSelector.vue';
 import { storeToRefs } from 'pinia'
 import { useSource } from '@/stores/sources'
 import DashboardItemEditor from './DashboardItemEditor.vue'
+import DashboardListQuickFilter from './DashboardListQuickFilter.vue'
 
 const hoveredSourceId = ref(1)
 const mapinstance = ref(null)
@@ -84,14 +93,19 @@ const showEditor = ref({
   display: false,
   default: {}
 })
+const quickFilter = ref({
+  pinned: 'include',
+  tags: []
+})
 
 function updateHovered(id) {
   hoveredSourceId.value = parseInt(id)
 }
 
+/*
 function scrollSourceIntoView(id) {
   dashboardlistinstance.value.scrollSourceIntoView(id)
-}
+}*/
 
 function addSource() {
   showEditor.value = {
@@ -128,8 +142,26 @@ const filteredSources = computed(() => {
         || source["tags"].includes(currentQuery)
         || source["headline"].toLowerCase().includes(currentQuery)
         || source["source"].toLowerCase().includes(currentQuery)
-        ) {
+      ) {
         allDataPoints.push(source)
+      }
+    });
+    return allDataPoints
+  }
+  return []
+})
+
+const pinnedSources = computed(() => {
+  if (sources.value && sources.value.length > 0) {
+    let allDataPoints = []
+    sources.value.forEach(source => {
+      if (
+        (quickFilter.value.pinned == 'include' && source["pinned"])
+        || (quickFilter.value.tags.length > 0 && source["tags"].filter(value => quickFilter.value.tags.includes(value)).length > 0)
+      ) {
+        if (!(quickFilter.value.pinned == 'exclude' && source["pinned"])){
+          allDataPoints.push(source)
+        }
       }
     });
     return allDataPoints
