@@ -43,7 +43,12 @@
           <el-form-item>
             <el-button
               :loading="loading"
-              class="login-button"
+              type="info"
+              block
+              @click="emit('cancel')"
+            >Cancel</el-button>
+            <el-button
+              :loading="loading"
               type="primary"
               native-type="submit"
               block
@@ -57,19 +62,22 @@
 </template>
 
 <script setup>
-import { ref, defineProps } from 'vue'
+import { ref, defineProps, defineEmits } from 'vue'
 import { useSource } from '@/stores/sources'
 const sourceStore = useSource()
 
+
+const emit = defineEmits(['cancel', 'submit'])
+
 const loading = ref(false)
 const model = ref({
-  "interface": "website",
-  "source": "@testtweet",
+  "interface": "",
+  "source": "",
   "headline": "",
-  "text": "This is a new source",
-  "language": "ua",
-  "timestamp": "2022-04-01T20:25:00Z",
-  "pinned": "true",
+  "text": "",
+  "language": "",
+  "timestamp": "",
+  "pinned": "false",
   "translations": [],
   "tags": [],
 })
@@ -78,6 +86,7 @@ async function createSource() {
   loading.value = true
   await sourceStore.createSource(model.value)
   loading.value = false
+  emit('submit')
 }
 
 defineProps({

@@ -32,7 +32,12 @@
       </div>
     </el-col>
     <el-col :xs="18" :sm="18" :md="10" :lg="12" :xl="12">
-      <dashboard-item-editor v-if="showEditor.display" :default="showEditor.default"></dashboard-item-editor>
+      <dashboard-item-editor
+        v-if="showEditor.display"
+        :default="showEditor.default"
+        @submit="showEditor.display = false"
+        @cancel="showEditor.display = false"
+      ></dashboard-item-editor>
       <dashboard-list
         ref="dashboardlistinstance"
         :hovered-source-id="hoveredSourceId"
