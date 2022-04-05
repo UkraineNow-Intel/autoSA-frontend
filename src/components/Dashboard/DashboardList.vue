@@ -3,16 +3,8 @@
     <el-col v-for="source in sources" :key="source['id']" :xs="24" :sm="24" :md="12" :lg="12" :xl="8">
       <dashboard-item
         :ref="setItemRef"
-        :source-id="source['id']"
-        :source-interface="source['interface']"
-        :source="source['source']"
-        :timestamp="source['timestamp']"
-        :text="source['text']"
-        :headline="source['headline']"
-        :image="source['image']"
+        :source="source"
         :hovered-source-id="hoveredSourceId"
-        :has-locations="'locations' in source && source['locations'].length > 0"
-        :pinned="Boolean(source['pinned'])"
         style="display: inline-block"
         @hovered="(a) => emit('hovered', a)"
         @show-on-map="(a) => emit('showOnMap', a)"
