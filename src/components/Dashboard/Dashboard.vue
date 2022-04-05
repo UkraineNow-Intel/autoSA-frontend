@@ -139,7 +139,6 @@ const filteredSources = computed(() => {
     let allDataPoints = []
     sources.value.forEach(source => {
       const currentQuery = props.searchQuery.toLowerCase()
-      console.log()
       if (
         (
           currentQuery == ''

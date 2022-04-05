@@ -11,7 +11,6 @@
             :fetch-suggestions="querySearch"
             clearable
             placeholder="Enter tag or text"
-            @select="submitSearch"
             @keydown.enter.prevent="submitSearch"
           />
           <button
