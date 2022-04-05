@@ -4,8 +4,8 @@ import path from 'path'
 import ElementPlus from 'unplugin-element-plus/vite'
 
 
-export default defineConfig(({ command, mode }) => {
-  baseSettings = {
+export default defineConfig(({ command }) => {
+  let baseSettings = {
     plugins: [vue(), ElementPlus()],
     resolve: {
       alias: {
