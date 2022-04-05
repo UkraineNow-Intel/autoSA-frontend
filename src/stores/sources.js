@@ -51,6 +51,20 @@ export const useSource = defineStore('source', {
         newDict[this.sources[i]["id"]] = i
       }
       this.sourceIdDict = newDict
+    },
+    async addTag(id, tag){
+      const IdPosition = this.sourceIdDict[id]
+      let currentTags = [...this.sources[IdPosition]["tags"]] // copy list of tags
+      currentTags.push(tag)
+      return this.changeSource(id, {'tags': currentTags})
+    },
+    async deleteTag(id, tag){
+      const IdPosition = this.sourceIdDict[id]
+      let currentTags = [...this.sources[IdPosition]["tags"]] // copy list of tags
+      if (currentTags.indexOf(tag) != -1){
+        currentTags.splice(currentTags.indexOf(tag), 1)
+      }
+      return this.changeSource(id, {'tags': currentTags})
     }
   },
 })

@@ -27,6 +27,9 @@
       </div>
       <div class="dashboard-text flex-none lg:flex-1 lg:grow">{{ source.text }}</div>
       <div class="dashboard-actions flex-none">
+        <dashboard-item-tags :source-id="source.id" :tags="source.tags" />
+      </div>
+      <div class="dashboard-actions flex-none">
         <el-button
           v-if="'locations' in source && source.locations.length > 0"
           @click="emit('showOnMap', source.id)"
@@ -46,6 +49,7 @@ import { ref, defineProps, defineEmits, defineExpose } from 'vue'
 import { ElButton, ElImage } from 'element-plus'
 import moment from 'moment'
 import { useSource } from '@/stores/sources'
+import DashboardItemTags from './DashboardItemTags.vue';
 
 const emit = defineEmits(['hovered', 'showOnMap'])
 
