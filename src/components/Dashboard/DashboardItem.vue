@@ -2,33 +2,46 @@
   <div
     ref="item"
     class="dashboard-item"
-    :class="hoveredSourceId == sourceId ? 'border-2 rounded border-yellow-600' : 'border-2 rounded'"
-    @mouseover="updateHovered(sourceId)"
+    :class="hoveredSourceId == source.id ? 'border-2 rounded border-yellow-600' : 'border-2 rounded'"
+    @mouseover="updateHovered(source.id)"
     @mouseleave="updateHovered(-1)"
   >
     <div class="flex flex-1 flex-col" style="height: 100%">
-      <div v-if="image" class="dashboard-image flex-none">
-        <el-image :src="image" fit="cover" />
+      <div v-if="source.image" class="dashboard-image flex-none">
+        <el-image :src="source.image" fit="cover" />
       </div>
       <div class="dashboard-meta flex-none">
-        <div v-if="source">
+        <div v-if="source.source">
           <span>Posted:</span>
-          <span>{{ source }}</span>
-          <span v-if="sourceInterface"> ({{ sourceInterface }})</span>
+          <span>{{ source.source }}</span>
+          <span v-if="source.interface" style="padding-left: 3px;">({{ source.interface }})</span>
         </div>
-        <div v-if="timestamp">
+        <div v-if="source.timestamp">
           <span>Time:</span>
-          <span>{{ moment(timestamp).format("ddd MMM DD, YYYY [at] HH:mm a") }}</span>
+          <span>{{ moment(source.timestamp).format("ddd MMM DD, YYYY [at] HH:mm a") }}</span>
         </div>
-        <div v-if="sourceId">
+        <div v-if="source.id">
           <span>Id:</span>
-          <span>{{ sourceId }}</span>
+          <span>{{ source.id }}</span>
         </div>
       </div>
-      <div class="dashboard-text flex-none lg:flex-1 lg:grow ">{{ text }}</div>
+      <div v-if="source.headline" class="dashboard-headline flex-none">
+        <b>{{ source.headline }}</b>
+      </div>
+      <div class="dashboard-text flex-none lg:flex-1 lg:grow">{{ source.text }}</div>
+      <div class="dashboard-tags flex-none">
+        <dashboard-item-tags :source-id="source.id" :tags="source.tags" />
+      </div>
       <div class="dashboard-actions flex-none">
-        <el-button v-if="hasLocations" @click="emit('showOnMap', sourceId)">Show on Map</el-button>
-        <el-button @click="togglePin">{{ pinned ? 'Unpin' : 'Pin' }}</el-button>
+        <el-button
+          v-if="'locations' in source && source.locations.length > 0"
+          @click="emit('showOnMap', source.id)"
+        >Show on Map</el-button>
+        <el-button
+          :loading="pinningLoading"
+          @click="togglePin"
+        >{{ source.pinned ? 'Unpin' : 'Pin' }}</el-button>
+        <el-button :loading="deleteLoading" @click="confirmDelete">Delete Item</el-button>
       </div>
     </div>
   </div>
@@ -38,34 +51,58 @@
 import { ref, defineProps, defineEmits, defineExpose } from 'vue'
 import { ElButton, ElImage } from 'element-plus'
 import moment from 'moment'
-import AutoSaApi from "@/api/api";
+import { useSource } from '@/stores/sources'
+import DashboardItemTags from './DashboardItemTags.vue';
+import { ElMessage, ElMessageBox } from 'element-plus'
 
 const emit = defineEmits(['hovered', 'showOnMap'])
 
 const item = ref(null)
+const pinningLoading = ref(false)
+const deleteLoading = ref(false)
+const sourceStore = useSource()
 
 function updateHovered(id) {
   emit('hovered', id)
 }
 
 const props = defineProps({
-  sourceId: { type: Number, required: true },
-  source: { type: String, required: false, default: undefined },
-  sourceInterface: { type: String, required: false, default: undefined },
-  timestamp: { type: String, required: false, default: undefined },
+  source: { type: Object, required: true },
   hoveredSourceId: { type: Number, required: false, default: () => -1 },
-  image: { type: String, required: false, default: () => null },
-  text: { type: String, required: true },
-  hasLocations: { type: Boolean, required: false, default: () => false },
-  pinned: { type: Boolean, required: false, default: () => false }
 })
 
-function togglePin() {
-  AutoSaApi.changeSource(props.sourceId, {'pinned': !props.pinned}).then((t) => console.log(t))
+async function togglePin() {
+  pinningLoading.value = true
+  await sourceStore.changeSource(props.source["id"], { 'pinned': !props.source["pinned"] })
+  pinningLoading.value = false
+}
+
+
+async function confirmDelete() {
+  ElMessageBox.confirm(
+    'Do you really want to delete source ' + props.source["id"] + ' ?',
+    'Delete Source',
+    {
+      confirmButtonText: 'Delte Source',
+      cancelButtonText: 'Cancel',
+      type: 'warning',
+    }
+  )
+    .then(deleteItem)
+}
+
+async function deleteItem() {
+  deleteLoading.value = true
+  await sourceStore.deleteSource(props.source["id"])
+  deleteLoading.value = false
+  ElMessage({
+    type: 'success',
+    message: 'Source ' + props.source["id"] + ' deleted',
+  })
 }
 
 function scrollToElement() {
-  item.value.scrollIntoView({'behavior': 'smooth'})
+  item.value.scrollIntoView({ 'behavior': 'smooth' })
 }
 
 defineExpose({ scrollToElement })
@@ -98,7 +135,9 @@ defineExpose({ scrollToElement })
   overflow: auto;
 }
 
+.dashboard-headline,
+.dashboard-tags,
 .dashboard-actions {
-  padding: 10px 0;
+  padding: 5px 0;
 }
 </style>

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div style="display: inline-block; text-align: left; margin-bottom: 20px; max-width: 100%;">
+    <div style="display: inline-block; text-align: left; margin-bottom: 20px; width: 100%;">
       <p style="padding: 5px">{{ name }}</p>
       <el-select
         v-model="value1"

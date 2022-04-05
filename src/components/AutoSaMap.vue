@@ -46,7 +46,7 @@ function setCenter(id) {
 }
 
 const props = defineProps({
-  sources: { type: Object, required: false, default: () => {} },
+  sources: { type: Array, required: false, default: () => [] },
   hoveredSourceId: { type: Number, required: false, default: () => -1 },
 })
 
@@ -65,9 +65,9 @@ function zoomToId(id) {
 defineExpose({ zoomToId })
 
 function getSourceLocations(id){
-   for(var i = 0; i < props.sources["sources"].length; i++) {
-      if (props.sources["sources"][i]["id"] == id){
-        return props.sources["sources"][i]["locations"]
+   for(var i = 0; i < props.sources.length; i++) {
+      if (props.sources[i]["id"] == id){
+        return props.sources[i]["locations"]
       }
    }
    return 
@@ -76,7 +76,7 @@ function getSourceLocations(id){
 const markers = computed(() => {
   if (props.sources){
     let allDataPoints = []
-    props.sources["sources"].forEach(source => {
+    props.sources.forEach(source => {
       if ("locations" in source){
         source["locations"].forEach(loc => {
           allDataPoints.push({id: source.id, text: source.text, coordinates: [loc.lat, loc.lng], size: props.hoveredSourceId == source.id ? [45,45] : [25,25] })
