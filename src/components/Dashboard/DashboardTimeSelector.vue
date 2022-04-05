@@ -1,26 +1,32 @@
 <template>
   <div>
-    <div style="display: inline-block; text-align: left; margin-bottom: 20px; max-width: 100%;">
+    <div style="display: inline-block; text-align: left; margin-bottom: 20px; width: 100%;">
       <p style="padding: 5px">Time</p>
       <el-date-picker
-        v-model="value2"
+        v-model="value"
         type="datetimerange"
         :shortcuts="shortcuts"
         range-separator="To"
         start-placeholder="Start date"
         end-placeholder="End date"
         style="width: 100%"
-        disabled
+        @change="emitChange"
       />
     </div>
   </div>
 </template>
 
 <script setup>
-import {ref } from 'vue'
+import {ref, defineEmits } from 'vue'
 import { ElDatePicker } from 'element-plus'
 
-const value2 = ref('')
+const value = ref('')
+
+const emit = defineEmits(['change'])
+
+function emitChange(){
+  emit('change', value.value)
+}
 
 const shortcuts = [
   {

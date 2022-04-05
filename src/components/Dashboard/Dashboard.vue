@@ -7,8 +7,7 @@
           :offset="80"
           style="text-align: left; width: 100%"
         >
-          <el-button @click="addSource">Add Source</el-button>
-          <hr style="max-width: 50%; margin: 10px auto;" />
+          <p style="padding: 5px; font-weight: bold; font-size: 1.2em;">Filter</p>
           <dashboard-settings-box
             name="Websites"
             :options="[
@@ -26,8 +25,13 @@
               { label: 'Other Sites', value: 'other' },
             ]"
           ></dashboard-settings-box>
-          <hr style="max-width: 50%; margin: 10px auto;" />
-          <dashboard-time-selector></dashboard-time-selector>
+          <!--<hr style="max-width: 50%; margin: 10px auto;" />-->
+          <dashboard-time-selector @change="(x) => { timeFilter = x }" />
+          <hr style="max-width: 80%; margin: 10px auto; border-top-width: 2px;" />
+          <div>
+            <p style="padding: 5px; font-weight: bold; font-size: 1.2em;">Actions</p>
+            <el-button @click="addSource">Add Source</el-button>
+          </div>
         </el-affix>
       </div>
     </el-col>
@@ -83,9 +87,11 @@ import { storeToRefs } from 'pinia'
 import { useSource } from '@/stores/sources'
 import DashboardItemEditor from './DashboardItemEditor.vue'
 import DashboardListQuickFilter from './DashboardListQuickFilter.vue'
+import moment from 'moment'
 
 const hoveredSourceId = ref(1)
 const mapinstance = ref(null)
+const timeFilter = ref(null)
 const dashboardlistinstance = ref(null)
 const sourceStore = useSource()
 const { sources } = storeToRefs(sourceStore)
@@ -129,19 +135,25 @@ onMounted(() => {
 })
 
 const filteredSources = computed(() => {
-  if (props.searchQuery == '') {
-    return sources.value
-  }
   if (sources.value && sources.value.length > 0) {
     let allDataPoints = []
     sources.value.forEach(source => {
       const currentQuery = props.searchQuery.toLowerCase()
+      console.log()
       if (
-        currentQuery == ''
-        || source["text"].toLowerCase().includes(currentQuery)
-        || source["tags"].includes(currentQuery)
-        || source["headline"].toLowerCase().includes(currentQuery)
-        || source["source"].toLowerCase().includes(currentQuery)
+        (
+          currentQuery == ''
+          || source["text"].toLowerCase().includes(currentQuery)
+          || source["tags"].includes(currentQuery)
+          || source["headline"].toLowerCase().includes(currentQuery)
+          || source["source"].toLowerCase().includes(currentQuery)
+        ) && (
+          !timeFilter.value
+          || (
+            moment(timeFilter.value[0]).isBefore(moment(source["timestamp"]))
+            && moment(timeFilter.value[1]).isAfter(moment(source["timestamp"]))
+          )
+        )
       ) {
         allDataPoints.push(source)
       }
@@ -159,7 +171,7 @@ const pinnedSources = computed(() => {
         (quickFilter.value.pinned == 'include' && source["pinned"])
         || (quickFilter.value.tags.length > 0 && source["tags"].filter(value => quickFilter.value.tags.includes(value)).length > 0)
       ) {
-        if (!(quickFilter.value.pinned == 'exclude' && source["pinned"])){
+        if (!(quickFilter.value.pinned == 'exclude' && source["pinned"])) {
           allDataPoints.push(source)
         }
       }
