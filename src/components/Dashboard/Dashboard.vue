@@ -122,7 +122,13 @@ const filteredSources = computed(() => {
     let allDataPoints = []
     sources.value.forEach(source => {
       const currentQuery = props.searchQuery.toLowerCase()
-      if (currentQuery == '' || source["text"].toLowerCase().includes(currentQuery)) {
+      if (
+        currentQuery == ''
+        || source["text"].toLowerCase().includes(currentQuery)
+        || source["tags"].includes(currentQuery)
+        || source["headline"].toLowerCase().includes(currentQuery)
+        || source["source"].toLowerCase().includes(currentQuery)
+        ) {
         allDataPoints.push(source)
       }
     });

@@ -10,7 +10,7 @@
           <input
             v-model="searchQuery" 
             class="p-3 flex-1 text-lg rounded-l shadow-lg shadow-black/70 placeholder-neutral-500 focus:placeholder-cyan-400 hover:placeholder-cyan-400  max-w-md outline-none transition-colors"
-            placeholder="Enter location or phrase."
+            placeholder="Enter tag or text"
             @keydown.enter.prevent="submitSearch"
           />
           <button 

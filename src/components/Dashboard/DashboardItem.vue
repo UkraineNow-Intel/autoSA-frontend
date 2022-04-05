@@ -14,7 +14,7 @@
         <div v-if="source.source">
           <span>Posted:</span>
           <span>{{ source.source }}</span>
-          <span v-if="source.interface">({{ source.interface }})</span>
+          <span v-if="source.interface" style="padding-left: 3px;">({{ source.interface }})</span>
         </div>
         <div v-if="source.timestamp">
           <span>Time:</span>
@@ -25,8 +25,11 @@
           <span>{{ source.id }}</span>
         </div>
       </div>
+      <div v-if="source.headline" class="dashboard-headline flex-none">
+        <b>{{ source.headline }}</b>
+      </div>
       <div class="dashboard-text flex-none lg:flex-1 lg:grow">{{ source.text }}</div>
-      <div class="dashboard-actions flex-none">
+      <div class="dashboard-tags flex-none">
         <dashboard-item-tags :source-id="source.id" :tags="source.tags" />
       </div>
       <div class="dashboard-actions flex-none">
@@ -113,7 +116,9 @@ defineExpose({ scrollToElement })
   overflow: auto;
 }
 
+.dashboard-headline,
+.dashboard-tags,
 .dashboard-actions {
-  padding: 10px 0;
+  padding: 5px 0;
 }
 </style>

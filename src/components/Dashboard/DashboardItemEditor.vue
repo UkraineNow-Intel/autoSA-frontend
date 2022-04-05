@@ -26,7 +26,7 @@
             />
           </el-form-item>
           <el-form-item prop="language">
-            <el-select v-model="model.language" placeholder="Select">
+            <el-select v-model="model.language" placeholder="Language">
               <el-option label="Ukrainian" value="ua" />
               <el-option label="Russian" value="ru" />
               <el-option label="English" value="en" />
