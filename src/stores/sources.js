@@ -18,7 +18,12 @@ export const useSource = defineStore('source', {
         });
       });
       return Array.from(alltags)
-    } 
+    },
+    getSourcesWithTag(state){
+      return (tag) => {
+        return state.sources.filter((x) => x.tags.includes(tag));
+      }
+    }
   },
   actions: {
     async getSourcesFromApi() {

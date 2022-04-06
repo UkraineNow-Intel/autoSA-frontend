@@ -12,7 +12,9 @@
       </router-link>
       <div>
         <router-link class="nav-link" :to="{ name: 'home' }">Research</router-link>
+        <router-link class="nav-link" :to="{ name: 'tags' }">Tags</router-link>
         <router-link class="nav-link" :to="{ name: 'translator' }">Translator</router-link>
+        <div class="vertical-divider"></div>
         <router-link v-if="!authStore.isLoggedIn" class="nav-link" :to="{ name: 'login' }">Login</router-link>
         <a v-if="authStore.isLoggedIn" style="cursor:pointer" type="info" class="nav-link" @click="confirmLogout">Logout</a>
       </div>
@@ -49,5 +51,13 @@ async function logout() {
 <style scoped>
 .nav-link {
   @apply text-white hover:text-yellow-300 active-class:text-yellow-300 p-3 active-class:underline underline-offset-2 decoration-yellow-300 transition-colors duration-100;
+}
+
+.vertical-divider {
+  border-left: 1px solid white;
+  height: 100%;
+  width: 10px;
+  margin: 8px;
+  display: inline;
 }
 </style>

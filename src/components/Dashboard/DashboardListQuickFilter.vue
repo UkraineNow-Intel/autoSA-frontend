@@ -2,14 +2,13 @@
   <div style="margin: 1rem;">
     <div style="display: inline-block; text-align: left; width: 100%;">
       <div>
-        <span style="margin-right: 12px">Pinned:</span>
         <el-radio-group v-model="pinned" @change="emitupdate">
+          <el-radio label="na">Show by tag</el-radio>
           <el-radio label="include">Include all pinned</el-radio>
           <el-radio label="exclude">Hide all pinned</el-radio>
-          <el-radio label="na">Don't care</el-radio>
         </el-radio-group>
       </div>
-      <el-select v-model="selectedTags" multiple placeholder="Filter by tags" style="width: 100%" @change="emitupdate">
+      <el-select v-model="selectedTags" multiple placeholder="Filter by tags" style="width: 100%;" @change="emitupdate">
         <el-option v-for="item in sourceStore.tags" :key="item" :label="item" :value="item" />
       </el-select>
     </div>
