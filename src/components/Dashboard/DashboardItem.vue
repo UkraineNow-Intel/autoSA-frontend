@@ -38,10 +38,15 @@
           @click="emit('showOnMap', source.id)"
         >Show on Map</el-button>
         <el-button
+          v-if="authStore.hasPermission('changeSource')"
           :loading="pinningLoading"
           @click="togglePin"
         >{{ source.pinned ? 'Unpin' : 'Pin' }}</el-button>
-        <el-button :loading="deleteLoading" @click="confirmDelete">Delete Item</el-button>
+        <el-button
+          v-if="authStore.hasPermission('deleteSource')"
+          :loading="deleteLoading"
+          @click="confirmDelete"
+        >Delete Item</el-button>
       </div>
     </div>
   </div>
@@ -52,6 +57,7 @@ import { ref, defineProps, defineEmits, defineExpose } from 'vue'
 import { ElButton, ElImage } from 'element-plus'
 import moment from 'moment'
 import { useSource } from '@/stores/sources'
+import { useAuth } from '@/stores/auth'
 import DashboardItemTags from './DashboardItemTags.vue';
 import { ElMessage, ElMessageBox } from 'element-plus'
 
@@ -61,6 +67,7 @@ const item = ref(null)
 const pinningLoading = ref(false)
 const deleteLoading = ref(false)
 const sourceStore = useSource()
+const authStore = useAuth()
 
 function updateHovered(id) {
   emit('hovered', id)

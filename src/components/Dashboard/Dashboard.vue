@@ -7,31 +7,7 @@
           :offset="80"
           style="text-align: left; width: 100%"
         >
-          <p style="padding: 5px; font-weight: bold; font-size: 1.2em;">Filter</p>
-          <dashboard-settings-box
-            name="Websites"
-            :options="[
-              { label: 'Factal', value: 'factal' },
-              { label: 'Live UA Map', value: 'liveuamap' },
-              { label: 'BBC', value: 'bbc' },
-            ]"
-          ></dashboard-settings-box>
-          <dashboard-settings-box
-            name="Socials"
-            :options="[
-              { label: 'Twitter', value: 'twitter' },
-              { label: 'Telegram', value: 'telegram' },
-              { label: 'Facebook', value: 'facebook' },
-              { label: 'Other Sites', value: 'other' },
-            ]"
-          ></dashboard-settings-box>
-          <!--<hr style="max-width: 50%; margin: 10px auto;" />-->
-          <dashboard-time-selector @change="(x) => { timeFilter = x }" />
-          <hr style="max-width: 80%; margin: 10px auto; border-top-width: 2px;" />
-          <div>
-            <p style="padding: 5px; font-weight: bold; font-size: 1.2em;">Actions</p>
-            <el-button @click="addSource">Add Source</el-button>
-          </div>
+          <dashboard-settings @add-source="addSource"></dashboard-settings>
         </el-affix>
       </div>
     </el-col>
@@ -81,13 +57,12 @@
 import { ref, onMounted, computed, defineProps } from 'vue'
 // import AutoSaMap from '@/components/AutoSaMap.vue'
 import DashboardList from '@/components/Dashboard/DashboardList.vue';
-import DashboardSettingsBox from './DashboardSettingsBox.vue';
-import DashboardTimeSelector from './DashboardTimeSelector.vue';
 import { storeToRefs } from 'pinia'
 import { useSource } from '@/stores/sources'
 import DashboardItemEditor from './DashboardItemEditor.vue'
 import DashboardListQuickFilter from './DashboardListQuickFilter.vue'
 import moment from 'moment'
+import DashboardSettings from './Settings/DashboardSettings.vue';
 
 const hoveredSourceId = ref(1)
 const mapinstance = ref(null)
