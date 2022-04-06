@@ -12,6 +12,7 @@
       </router-link>
       <div>
         <router-link class="nav-link" :to="{ name: 'home' }">Research</router-link>
+        <router-link class="nav-link" :to="{ name: 'tags' }">Tags</router-link>
         <router-link class="nav-link" :to="{ name: 'translator' }">Translator</router-link>
         <div class="vertical-divider"></div>
         <router-link v-if="!authStore.isLoggedIn" class="nav-link" :to="{ name: 'login' }">Login</router-link>

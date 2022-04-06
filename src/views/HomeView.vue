@@ -2,7 +2,7 @@
   <div>
     <section
       class="bg-cover bg-center bg-slate-700 min-h-[50vh] py-10 px-5 flex items-center"
-      style="background-image: url('./image.jfif')"
+      style="background-image: url('/image.jfif')"
     >
       <div class="container mx-auto max-w-5xl text-center">
         <form class="flex justify-center homeview-searchbar-form">
