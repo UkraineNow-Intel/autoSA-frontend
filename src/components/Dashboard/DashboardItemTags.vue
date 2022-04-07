@@ -2,12 +2,12 @@
   <el-tag
     v-for="tag in tags"
     :key="tag"
-    :closable="authStore.hasPermission('changeSource')"
+    :closable="authStore.hasPermission('change_source')"
     :disable-transitions="false"
     @close="deleteTag(tag)"
   >{{ tag }}</el-tag>
 
-  <div v-if="authStore.hasPermission('changeSource')" style="display: inline-block">
+  <div v-if="authStore.hasPermission('change_source')" style="display: inline-block">
     <el-autocomplete
       v-if="inputVisible"
       ref="InputRef"

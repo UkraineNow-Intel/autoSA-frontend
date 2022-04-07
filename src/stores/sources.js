@@ -26,6 +26,10 @@ export const useSource = defineStore('source', {
     }
   },
   actions: {
+    clearStore() {
+      this.sources = []
+      this.sourceIdDict = {}
+    },
     async getSourcesFromApi() {
       const data = await AutoSaApi.getSources().then((response) => { return response.data })
       this.sources = data
@@ -67,10 +71,6 @@ export const useSource = defineStore('source', {
         newDict[this.sources[i]["id"]] = i
       }
       this.sourceIdDict = newDict
-    },
-    clearStore() {
-      this.sources = []
-      this.sourceIdDict = {}
     },
     async addTag(id, tag) {
       const IdPosition = this.sourceIdDict[id]

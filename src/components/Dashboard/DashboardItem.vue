@@ -38,12 +38,12 @@
           @click="emit('showOnMap', source.id)"
         >Show on Map</el-button>
         <el-button
-          v-if="authStore.hasPermission('changeSource')"
+          v-if="authStore.hasPermission('change_source')"
           :loading="pinningLoading"
           @click="togglePin"
         >{{ source.pinned ? 'Unpin' : 'Pin' }}</el-button>
         <el-button
-          v-if="authStore.hasPermission('deleteSource')"
+          v-if="authStore.hasPermission('delete_source')"
           :loading="deleteLoading"
           @click="confirmDelete"
         >Delete Item</el-button>

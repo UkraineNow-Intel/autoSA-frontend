@@ -20,8 +20,8 @@
     ></dashboard-settings-box>
     <!--<hr style="max-width: 50%; margin: 10px auto;" />-->
     <time-selector @change="(x) => { timeFilter = x }" />
-    <hr v-if="authStore.hasPermission('addSource')" style="max-width: 80%; margin: 10px auto; border-top-width: 2px;" />
-    <div v-if="authStore.hasPermission('addSource')">
+    <hr v-if="authStore.hasPermission('add_source')" style="max-width: 80%; margin: 10px auto; border-top-width: 2px;" />
+    <div v-if="authStore.hasPermission('add_source')">
       <p style="padding: 5px; font-weight: bold; font-size: 1.2em;">Actions</p>
       <el-button @click="(x) => emit('addSource', x)">Add Source</el-button>
     </div>
