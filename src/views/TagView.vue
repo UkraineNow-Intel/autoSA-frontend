@@ -12,7 +12,7 @@
           @click="tagClicked(tag)"
         >{{ tag }}</el-tag>
         <div v-if="route.params.tag">
-          <dashboard-list :sources="sourceStore.getSourcesWithTag(route.params.tag)"></dashboard-list>
+          <dashboard-list :sources="sourceStore.getSourcesWithTags([route.params.tag])"></dashboard-list>
         </div>
       </div>
     </div>
