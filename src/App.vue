@@ -11,13 +11,10 @@ import { RouterView } from 'vue-router'
 import Navbar from '@/components/Navbar.vue'
 import Footer from '@/components/Footer.vue'
 import { useAuth } from '@/stores/auth'
-import { onMounted } from 'vue'
+
+
 const authStore = useAuth()
-
-
-onMounted(() => {
-  authStore.update()
-})
+authStore.update()
 
 </script>
 

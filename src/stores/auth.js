@@ -1,11 +1,12 @@
 import { defineStore } from 'pinia'
 import AutoSaApi from "@/api/api";
 import { useSource } from './sources'
+import router from "@/plugins/router";
 
 export const useAuth = defineStore('auth', {
     state: () => {
         return {
-            isLoggedIn: false,
+            isLoggedIn: undefined,
             username: '',
             permissions: [],
         }
@@ -52,6 +53,7 @@ export const useAuth = defineStore('auth', {
                 this.clearStore()
                 const sourceStore = useSource()
                 sourceStore.clearStore()
+                router.push({ name: 'login' })
                 return { 'success': true }
             } catch (e) {
                 return { 'success': false }
