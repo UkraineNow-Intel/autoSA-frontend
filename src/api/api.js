@@ -1,7 +1,6 @@
 import http from "./client";
 // import sourceData from "./mockdata"
 import { ElNotification } from 'element-plus'
-import router from "@/plugins/router";
 
 class AutoSaApi {
     whoami() {
@@ -10,7 +9,7 @@ class AutoSaApi {
 
     // gets csrf cookie
     get_csrf() {
-        http.get('/api/csrf/', {})
+        return http.get('/api/csrf/', {})
     }
 
     login(username, password) {
@@ -44,13 +43,7 @@ class AutoSaApi {
      */
     getSources() {
         // return sourceData
-        return http.get(`/api/sources`).catch(e => {
-            ElNotification({
-                title: 'Error',
-                message: `Could not get source list \n ${e}`,
-                type: 'error',
-            })
-        })
+        return http.get(`/api/sources`)
     }
 
     /**
@@ -59,13 +52,7 @@ class AutoSaApi {
      */
     createSource(data) {
         // return sourceData
-        return http.post(`/api/sources`, data).catch(e => {
-            ElNotification({
-                title: 'Error',
-                message: `Could not create new source ${e}`,
-                type: 'error',
-            })
-        })
+        return http.post(`/api/sources`, data)
     }
 
     /**
@@ -74,17 +61,7 @@ class AutoSaApi {
      * @param {Object} data: e.g. {'pinnend': true}
      */
     changeSource(id, data) {
-        return http.patch(`/api/sources/${id}`, data).catch(e => {
-            if (e.response.status == 403) {
-                router.push({ name: 'login' })
-            } else {
-                ElNotification({
-                    title: 'Error',
-                    message: `Could not update source \n ${e}`,
-                    type: 'error',
-                })
-            }
-        })
+        return http.patch(`/api/sources/${id}`, data)
     }
 
     /**
@@ -92,17 +69,7 @@ class AutoSaApi {
      * @param {Number} id: ID of the source to delete
      */
     deleteSource(id) {
-        return http.delete(`/api/sources/${id}`).catch(e => {
-            if (e.response.status == 403) {
-                router.push({ name: 'login' })
-            } else {
-                ElNotification({
-                    title: 'Error',
-                    message: `Could not update source \n ${e}`,
-                    type: 'error',
-                })
-            }
-        })
+        return http.delete(`/api/sources/${id}`)
     }
 }
 export default new AutoSaApi();

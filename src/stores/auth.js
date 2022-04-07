@@ -13,6 +13,7 @@ export const useAuth = defineStore('auth', {
     },
     getters: {
         hasPermission: (state) => {
+            // return (permissionName) => {return true}
             return (permissionName) => {
                 return state.permissions.filter((x) => (x.codename == permissionName)).length > 0
             }
