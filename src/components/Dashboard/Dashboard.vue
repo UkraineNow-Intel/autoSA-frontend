@@ -1,17 +1,17 @@
 <template>
   <el-row :gutter="10">
-    <el-col :xs="6" :sm="6" :md="4" :lg="4" :xl="4">
+    <el-col :xs="24" :sm="6" :md="4" :lg="4" :xl="4">
       <div class="affix-container-settings">
         <el-affix
           target=".affix-container-settings"
-          :offset="80"
+          :offset="10"
           style="text-align: left; width: 100%"
         >
           <dashboard-settings @add-source="addSource"></dashboard-settings>
         </el-affix>
       </div>
     </el-col>
-    <el-col :xs="18" :sm="18" :md="10" :lg="12" :xl="12">
+    <el-col :xs="24" :sm="18" :md="10" :lg="12" :xl="12">
       <dashboard-item-editor
         v-if="showEditor.display"
         :default="showEditor.default"
@@ -26,34 +26,53 @@
         @show-on-map="showIdOnMap"
       ></dashboard-list>
     </el-col>
-    <el-col :xs="24" :sm="24" :md="10" :lg="8" :xl="8" style="border-left: 1px solid lightgray;">
+    <el-col :xs="24" :sm="24" :md="10" :lg="8" :xl="8">
       <div class="affix-container-map">
-        <el-affix target=".affix-container-map" style="width: 100%;" :offset="80">
-          <dashboard-list-quick-filter @update-filter="(options) => quickFilter = options"></dashboard-list-quick-filter>
-          <div class="sticky-source-list">
-            <dashboard-list
-              ref="dashboardlistinstance"
-              :hovered-source-id="hoveredSourceId"
-              :sources="pinnedSources"
-              single-column
-              @hovered="updateHovered"
-              @show-on-map="showIdOnMap"
-            ></dashboard-list>
-          </div>
+        <el-affix target=".affix-container-map" style="width: 100%;" :offset="10">
+          <el-tabs
+            v-model="currentTab"
+            type="border-card"
+            style="margin: 1em;"
+            @tab-click="invalidateMap"
+          >
+            <el-tab-pane label="Pinned" name="pinned">
+              <div class="sticky-source-list">
+                <dashboard-list
+                  :hovered-source-id="hoveredSourceId"
+                  :sources="sourceStore.getPinnedSources()"
+                  single-column
+                  @hovered="updateHovered"
+                  @show-on-map="showIdOnMap"
+                ></dashboard-list>
+              </div>
+            </el-tab-pane>
+            <el-tab-pane label="Tags" name="tags">
+              <div class="sticky-source-list-filter">
+                <dashboard-list-quick-filter v-model="quickFilter"></dashboard-list-quick-filter>
+              </div>
+              <div class="sticky-source-list with-borders">
+                <dashboard-list
+                  :hovered-source-id="hoveredSourceId"
+                  :sources="sourceStore.getSourcesWithTags(quickFilter.tags)"
+                  single-column
+                  @hovered="updateHovered"
+                  @show-on-map="showIdOnMap"
+                ></dashboard-list>
+              </div>
+            </el-tab-pane>
+            <el-tab-pane label="Map" name="map">
+              <auto-sa-map
+                ref="mapinstance"
+                style="width: 100%; max-width: 1000px; height: 60vh;"
+                :sources="filteredSources"
+                :hovered-source-id="hoveredSourceId"
+                @hovered="updateHovered"
+                @marker-clicked="scrollSourceIntoView"
+              ></auto-sa-map>
+            </el-tab-pane>
+          </el-tabs>
         </el-affix>
       </div>
-      <!--<div class="affix-container-map">
-        <el-affix target=".affix-container-map" style="width: 100%" :offset="80">
-          <auto-sa-map
-            ref="mapinstance"
-            style="width: 100%; max-width: 1000px; height: 60vh;"
-            :sources="filteredSources"
-            :hovered-source-id="hoveredSourceId"
-            @hovered="updateHovered"
-            @marker-clicked="scrollSourceIntoView"
-          ></auto-sa-map>
-        </el-affix>
-      </div>-->
     </el-col>
   </el-row>
 </template>
@@ -62,7 +81,7 @@
 
 <script setup>
 import { ref, onMounted, computed, defineProps } from 'vue'
-// import AutoSaMap from '@/components/AutoSaMap.vue'
+import AutoSaMap from '@/components/AutoSaMap.vue'
 import DashboardList from '@/components/Dashboard/DashboardList.vue';
 import { storeToRefs } from 'pinia'
 import { useSource } from '@/stores/sources'
@@ -82,18 +101,20 @@ const showEditor = ref({
   default: {}
 })
 const quickFilter = ref({
-  pinned: 'include',
+  pinned: 'na',
   tags: []
 })
+
+const currentTab = ref('pinned')
 
 function updateHovered(id) {
   hoveredSourceId.value = parseInt(id)
 }
 
-/*
+
 function scrollSourceIntoView(id) {
   dashboardlistinstance.value.scrollSourceIntoView(id)
-}*/
+}
 
 function addSource() {
   showEditor.value = {
@@ -105,6 +126,12 @@ function addSource() {
 
 function showIdOnMap(id) {
   mapinstance.value.zoomToId(id)
+}
+
+function invalidateMap(tabname) {
+  if (tabname.paneName == "map") {
+    mapinstance.value.invalidateSize()
+  }
 }
 
 const props = defineProps({
@@ -144,24 +171,6 @@ const filteredSources = computed(() => {
   return []
 })
 
-const pinnedSources = computed(() => {
-  if (sources.value && sources.value.length > 0) {
-    let allDataPoints = []
-    sources.value.forEach(source => {
-      if (
-        (quickFilter.value.pinned == 'include' && source["pinned"])
-        || (quickFilter.value.tags.length > 0 && source["tags"].filter(value => quickFilter.value.tags.includes(value)).length > 0)
-      ) {
-        if (!(quickFilter.value.pinned == 'exclude' && source["pinned"])) {
-          allDataPoints.push(source)
-        }
-      }
-    });
-    return allDataPoints
-  }
-  return []
-})
-
 </script>
 
 <style scoped>
@@ -171,13 +180,20 @@ const pinnedSources = computed(() => {
   height: 100%;
   border-radius: 4px;
 }
+.sticky-source-list-filter {
+  padding: 0.2rem 1rem;
+  border: 1px solid lightgrey;
+  border-radius: 5px 5px 0 0;
+}
 .sticky-source-list {
-  max-height: 80vh;
+  max-height: 70vh;
   overflow-y: scroll;
   overflow-x: hidden;
-  margin: 1rem;
+}
+
+.sticky-source-list.with-borders {
   border: 1px solid lightgrey;
-  border-radius: 5px;
+  border-top: 0;
+  border-radius: 0 0 5px 5px;
 }
 </style>
-

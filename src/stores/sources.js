@@ -19,9 +19,16 @@ export const useSource = defineStore('source', {
       });
       return Array.from(alltags)
     },
-    getSourcesWithTag(state) {
-      return (tag) => {
-        return state.sources.filter((x) => x.tags.includes(tag));
+    getSourcesWithTags(state) {
+      return (tags) => {
+        return state.sources.filter((source) => {
+          return source.tags.filter(tag => tags.includes(tag)).length > 0
+        })
+      }
+    },
+    getPinnedSources(state) {
+      return () => {
+        return state.sources.filter((x) => x.pinned);
       }
     }
   },
