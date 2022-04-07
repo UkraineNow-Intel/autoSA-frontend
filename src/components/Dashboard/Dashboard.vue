@@ -27,14 +27,21 @@
       ></dashboard-list>
     </el-col>
     <el-col :xs="24" :sm="24" :md="10" :lg="8" :xl="8" style="border-left: 1px solid lightgray;">
-      <dashboard-list-quick-filter @update-filter="(options) => quickFilter = options"></dashboard-list-quick-filter>
-      <dashboard-list
-        ref="dashboardlistinstance"
-        :hovered-source-id="hoveredSourceId"
-        :sources="pinnedSources"
-        @hovered="updateHovered"
-        @show-on-map="showIdOnMap"
-      ></dashboard-list>
+      <div class="affix-container-map">
+        <el-affix target=".affix-container-map" style="width: 100%;" :offset="80">
+          <dashboard-list-quick-filter @update-filter="(options) => quickFilter = options"></dashboard-list-quick-filter>
+          <div class="sticky-source-list">
+            <dashboard-list
+              ref="dashboardlistinstance"
+              :hovered-source-id="hoveredSourceId"
+              :sources="pinnedSources"
+              single-column
+              @hovered="updateHovered"
+              @show-on-map="showIdOnMap"
+            ></dashboard-list>
+          </div>
+        </el-affix>
+      </div>
       <!--<div class="affix-container-map">
         <el-affix target=".affix-container-map" style="width: 100%" :offset="80">
           <auto-sa-map
@@ -164,4 +171,13 @@ const pinnedSources = computed(() => {
   height: 100%;
   border-radius: 4px;
 }
+.sticky-source-list {
+  max-height: 80vh;
+  overflow-y: scroll;
+  overflow-x: hidden;
+  margin: 1rem;
+  border: 1px solid lightgrey;
+  border-radius: 5px;
+}
 </style>
+

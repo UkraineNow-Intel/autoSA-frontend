@@ -1,8 +1,17 @@
 <template>
   <el-row :gutter="10" style="margin: 10px">
-    <el-col v-for="source in sources" :key="source['id']" :xs="24" :sm="24" :md="12" :lg="12" :xl="8">
+    <el-col
+      v-for="source in sources"
+      :key="source['id']"
+      :xs="24"
+      :sm="24"
+      :md="singleColumn ? 24 : 12"
+      :lg="singleColumn ? 24 : 12"
+      :xl="singleColumn ? 24 : 8"
+    >
       <dashboard-item
         :ref="setItemRef"
+        :fixed-height="!singleColumn"
         :source="source"
         :hovered-source-id="hoveredSourceId"
         style="display: inline-block"
@@ -11,13 +20,17 @@
       ></dashboard-item>
     </el-col>
     <el-col v-if="sources.length == 0" :xs="24">
-      <el-alert title="Sorry, this list is empty. Maybe you should change the filters?" type="info" center show-icon :closable="false" />
+      <el-alert
+        title="Sorry, this list is empty. Maybe you should change the filters?"
+        type="info"
+        center
+        show-icon
+        :closable="false"
+      />
     </el-col>
   </el-row>
 
-
-  <div class="dashboard-list">
-  </div>
+  <div class="dashboard-list"></div>
 </template>
 
 <script setup>
@@ -32,9 +45,10 @@ const emit = defineEmits(['hovered', 'showOnMap'])
 const props = defineProps({
   sources: { type: Array, required: false, default: () => [] },
   hoveredSourceId: { type: Number, required: false, default: () => -1 },
+  singleColumn: { type: Boolean, required: false, default: () => false },
 })
 
-function setItemRef (el) {
+function setItemRef(el) {
   if (el) {
     dashboarditemRefs.value.push(el)
   }

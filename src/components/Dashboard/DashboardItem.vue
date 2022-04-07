@@ -1,12 +1,12 @@
 <template>
   <div
     ref="item"
-    class="dashboard-item"
-    :class="hoveredSourceId == source.id ? 'border-2 rounded border-yellow-600' : 'border-2 rounded'"
+    class="dashboard-item border-2 rounded"
+    :class="{ 'border-yellow-600': hoveredSourceId == source.id, 'fixed-height': fixedHeight }"
     @mouseover="updateHovered(source.id)"
     @mouseleave="updateHovered(-1)"
   >
-    <div class="flex flex-1 flex-col" style="height: 100%">
+    <div class="flex flex-1 flex-col" style="height: 100%; text-align: left;">
       <div v-if="source.image" class="dashboard-image flex-none">
         <el-image :src="source.image" fit="cover" />
       </div>
@@ -76,6 +76,7 @@ function updateHovered(id) {
 const props = defineProps({
   source: { type: Object, required: true },
   hoveredSourceId: { type: Number, required: false, default: () => -1 },
+  fixedHeight: { type: Boolean, required: false, default: () => true },
 })
 
 async function togglePin() {
@@ -119,10 +120,15 @@ defineExpose({ scrollToElement })
 
 <style scoped>
 .dashboard-item {
-  @apply bg-slate-200 p-5 m-3 lg:h-[28rem];
+  @apply bg-slate-200 p-5 m-3;
   width: 100%;
   max-height: 90vh;
 }
+
+.dashboard-item.fixed-height {
+  @apply lg:h-[28rem];
+}
+
 .dashboard-image .el-image {
   height: 100px;
   width: 100%;
