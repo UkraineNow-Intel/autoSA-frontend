@@ -14,12 +14,12 @@ export const useSource = defineStore('source', {
       let alltags = new Set()
       state.sources.forEach(element => {
         element.tags.forEach(tag => {
-          alltags.add(tag)          
+          alltags.add(tag)
         });
       });
       return Array.from(alltags)
     },
-    getSourcesWithTag(state){
+    getSourcesWithTag(state) {
       return (tag) => {
         return state.sources.filter((x) => x.tags.includes(tag));
       }
@@ -68,19 +68,23 @@ export const useSource = defineStore('source', {
       }
       this.sourceIdDict = newDict
     },
-    async addTag(id, tag){
+    clearStore() {
+      this.sources = []
+      this.sourceIdDict = {}
+    },
+    async addTag(id, tag) {
       const IdPosition = this.sourceIdDict[id]
       let currentTags = [...this.sources[IdPosition]["tags"]] // copy list of tags
       currentTags.push(tag)
-      return this.changeSource(id, {'tags': currentTags})
+      return this.changeSource(id, { 'tags': currentTags })
     },
-    async deleteTag(id, tag){
+    async deleteTag(id, tag) {
       const IdPosition = this.sourceIdDict[id]
       let currentTags = [...this.sources[IdPosition]["tags"]] // copy list of tags
-      if (currentTags.indexOf(tag) != -1){
+      if (currentTags.indexOf(tag) != -1) {
         currentTags.splice(currentTags.indexOf(tag), 1)
       }
-      return this.changeSource(id, {'tags': currentTags})
+      return this.changeSource(id, { 'tags': currentTags })
     }
   },
 })

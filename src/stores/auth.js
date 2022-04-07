@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia'
 import AutoSaApi from "@/api/api";
-import namedPermissions from '@/stores/config/permissions' 
+import namedPermissions from '@/stores/config/permissions'
+import { useSource } from './sources'
 
 export const useAuth = defineStore('auth', {
     state: () => {
@@ -13,14 +14,14 @@ export const useAuth = defineStore('auth', {
     getters: {
         hasPermission: (state) => {
             return (...args) => {
-                if (args.length == 1){
+                if (args.length == 1) {
                     if (!(args[0] in namedPermissions)) {
                         console.log("Named permission not defined - misspelled?")
                         return false
                     }
                     args = namedPermissions[args[0]]
                 }
-                return (args[0] in state.permissions && args[1] in state.permissions[args[0]] && state.permissions[args[0]][args[1]].includes(args[2])) 
+                return (args[0] in state.permissions && args[1] in state.permissions[args[0]] && state.permissions[args[0]][args[1]].includes(args[2]))
             }
         }
     },
@@ -56,6 +57,8 @@ export const useAuth = defineStore('auth', {
                 this.username = ''
                 this.isLoggedIn = false
                 this.permissions = {}
+                const sourceStore = useSource()
+                sourceStore.clearStore()
                 return { 'success': true }
             } catch (e) {
                 return { 'success': false }
