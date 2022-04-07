@@ -3,9 +3,9 @@
     <div style="display: inline-block; text-align: left; width: 100%;">
       <div>
         <el-radio-group v-model="pinned" @change="emitupdate">
-          <el-radio label="na">Show by tag</el-radio>
+          <el-radio label="na">Filter by tag</el-radio>
           <el-radio label="include">Include all pinned</el-radio>
-          <el-radio label="exclude">Hide all pinned</el-radio>
+          <!--<el-radio label="exclude">Hide all pinned</el-radio>-->
         </el-radio-group>
       </div>
       <el-select v-model="selectedTags" multiple placeholder="Filter by tags" style="width: 100%;" @change="emitupdate">
