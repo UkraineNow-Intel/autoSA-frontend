@@ -9,12 +9,7 @@
         <el-input v-model="model.password" placeholder="Password" type="password"></el-input>
       </el-form-item>
       <el-form-item>
-        <el-button
-          :loading="loading"
-          type="primary"
-          native-type="submit"
-          block
-        >Login</el-button>
+        <el-button :loading="loading" type="primary" native-type="submit" block>Login</el-button>
       </el-form-item>
     </el-form>
     {{ error }}
@@ -50,8 +45,15 @@ async function login() {
   }
 }
 
-onMounted(() => {
-  AutoSaApi.get_csrf()
+onMounted(async () => {
+  await AutoSaApi.get_csrf()
+  if (authStore.isLoggedIn === undefined) {
+    await authStore.update()
+  }
+  if (authStore.isLoggedIn){
+    router.push({ name: 'home' })
+  }
+
 })
 
 </script>
