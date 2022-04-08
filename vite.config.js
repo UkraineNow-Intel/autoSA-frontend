@@ -13,6 +13,7 @@ export default defineConfig(({ command }) => {
       },
     },
     test: {
+      globals: true,
       deps: {
         inline: ['element-plus'],
       },

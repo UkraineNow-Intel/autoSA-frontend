@@ -7,12 +7,15 @@
     "build": "vite build",
     "preview": "vite preview",
     "test": "vitest --reporter=verbose --run",
+    "watch-tests": "vitest --reporter=verbose",
     "coverage": "vitest run --coverage",
     "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs --fix --ignore-path .gitignore"
   },
   "dependencies": {
+    "@vue/test-utils": "^2.0.0-rc.18",
     "axios": "^0.26.1",
     "element-plus": "^2.1.4",
+    "jsdom": "^19.0.0",
     "leaflet": "^1.7.1",
     "moment": "^2.29.1",
     "msw": "^0.39.2",

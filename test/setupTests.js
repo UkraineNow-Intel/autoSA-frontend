@@ -1,7 +1,7 @@
 import { afterAll, afterEach, beforeAll } from 'vitest'
 import { setupServer } from 'msw/node'
 import { rest } from 'msw'
-import sourceData from "./mockdata"
+import { sourceData } from "./mockdata"
 
 export const restHandlers = [
     rest.get('http://localhost/api/sources', (req, res, ctx) => {

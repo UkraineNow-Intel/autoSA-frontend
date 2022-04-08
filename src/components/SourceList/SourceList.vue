@@ -29,8 +29,6 @@
       />
     </el-col>
   </el-row>
-
-  <div class="dashboard-list"></div>
 </template>
 
 <script setup>
@@ -65,11 +63,4 @@ function scrollSourceIntoView(id) {
 
 defineExpose({ scrollSourceIntoView })
 
-
 </script>
-
-<style scoped>
-.dashboard-list div {
-  vertical-align: top;
-}
-</style>
