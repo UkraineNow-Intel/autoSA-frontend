@@ -17,7 +17,7 @@ export const restHandlers = [
     }),
     rest.post('http://localhost/api/sources', (req, res, ctx) => {
         const sourceObject = addBackendFieldsToSource(req.body)
-        return res(ctx.status(200), ctx.json(req.body))
+        return res(ctx.status(200), ctx.json(sourceObject))
     }),
     rest.patch('http://localhost/api/sources/15', (req, res, ctx) => {
         let data = addBackendFieldsToSource(newSourceData)

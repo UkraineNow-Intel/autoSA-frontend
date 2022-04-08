@@ -4,11 +4,25 @@ Vue.js frontend for autoSA
 ## Requirements
 - node
 
+Install with:
+```cmd
+npm install
+```
+or
+```cmd
+yarn install
+```
+
 ### Technologies Used
 - Netlify
 - Vue.js (Vue 3)
 - [TailwindCSS](https://tailwindcss.com/)
 - [Element-Plus](https://element-plus.org/en-US/component/button.html)
+
+For testing, we are using:
+- Vitest
+- jsdom (to mock dom elements)
+- Mock Service Worker (msw, to mock requests)
 
 ### Useful Extensions for editing
 
@@ -31,70 +45,56 @@ If using yarn:
 yarn dev
 ```
 
-**IMPORTANT NOTE:** When the dev server is running, whatever change you make will
-be live updated in your browser window when you open the link it provides :) 
-
 By default, the server will be served at `http://localhost:3000/` when you run it.
+You will need the backend server to run in another terminal. By default, a proxy is created and all requests to `http://localhost:3000/api/` will automatically be forwarded to the backend running at `http://localhost:8000`. 
 
-Furthermore, a proxy is created to our backend served at `http://localhost:3000/api/`. When you run requests against `./api/`, they will automatically be forwarded to our (production!) backend.
+### Frequently used commands
 
-### How to Add a Webpage
-
-1. Inside of `./src/views/` create a `PageName.vue` file.
-
-Inside of the the file, to add HTML, write a `<template></template>` tag and put your html inside of this.
-```html
-<template>
-    <h1>Hello World!</h1>
-</template>
-```
-If you want to add CSS to that file:
-```html
-<template>
-    <h1 class="red">Hello World!</h1>
-</template>
-
-<style>
-.red { color: red }
-</style>
-```
-If you want to add JavaScript:
-```html
-<template>
-    <!-- Render variables onto the page like this -->
-    <h1 class="red">{{ text }}</h1>
-</template>
-
-<script setup> <!-- Noice the "setup" in this tag -->
-
-const text = 'Hello'
-
-</script>
-
-<style>
-.red { color: red }
-</style>
+For linting, run:
+```cmd
+npm run lint
 ```
 
-### How to Add Images
+For testing, you can either do a single run:
+```cmd
+npm run test
+```
+
+Or continuously watch the tests:
+```cmd
+npm run watch-tests
+```
+
+You can further checkout the coverage of the tests with:
+```cmd
+npm run coverage
+```
+...this will create a new folder called `coverage`. 
+
+
+Furthermore, a proxy is created to our backend served at `http://localhost:3000/api/`. When you run requests against `./api/`, they will automatically be forwarded to backend.
+
+
+### Before you commit: Linting & Testing!
+Please make sure to run 
+
+```cmd
+npm run lint
+npm run test
+```
+or
+
+```cmd
+yarn lint
+yarn test
+```
+
+before commiting things / creating a PR, so that all code looks pretty & is tested!
+
+### Static files
 Add static images to the `./public/` directory, then access them in your html like this:
 ```html
 <template>
     <img src="/image.png" />
 </template>
 ```
-
-
-### Before you commit: Linting!
-Please make sure to run 
-
-```cmd
-npm run lint
-```
-or
-
-```cmd
-yarn lint
-```
-
-before commiting anything, so that all code looks pretty!
