@@ -1,5 +1,4 @@
 import http from "./client";
-// import sourceData from "./mockdata"
 import { ElNotification } from 'element-plus'
 
 class AutoSaApi {

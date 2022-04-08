@@ -15,7 +15,7 @@ const instance = axios.create({
 instance.interceptors.response.use(function (response) {
   return response;
 }, function (error) {
-  if (!error.request.responseURL.includes('whoami') && !error.request.responseURL.includes('login')) {
+  if ("responseURL" in error.request && !error.request.responseURL.includes('whoami') && !error.request.responseURL.includes('login')) {
     ElNotification({
       title: 'Error',
       message: `${error}`,
