@@ -9,7 +9,7 @@
       :lg="singleColumn ? 24 : 12"
       :xl="singleColumn ? 24 : 8"
     >
-      <dashboard-item
+      <source-item
         :ref="setItemRef"
         :fixed-height="!singleColumn"
         :source="source"
@@ -17,7 +17,7 @@
         style="display: inline-block"
         @hovered="(a) => emit('hovered', a)"
         @show-on-map="(a) => emit('showOnMap', a)"
-      ></dashboard-item>
+      ></source-item>
     </el-col>
     <el-col v-if="sources.length == 0" :xs="24">
       <el-alert
@@ -35,10 +35,10 @@
 
 <script setup>
 import { ref, onBeforeUpdate, defineProps, defineEmits, defineExpose } from 'vue'
-import DashboardItem from '@/components/Dashboard/DashboardItem.vue';
+import SourceItem from './Item/Source.vue';
 import { ElRow, ElCol } from 'element-plus'
 
-const dashboarditemRefs = ref([])
+const sourceItemRefs = ref([])
 
 const emit = defineEmits(['hovered', 'showOnMap'])
 
@@ -50,17 +50,17 @@ const props = defineProps({
 
 function setItemRef(el) {
   if (el) {
-    dashboarditemRefs.value.push(el)
+    sourceItemRefs.value.push(el)
   }
 }
 
 onBeforeUpdate(() => {
-  dashboarditemRefs.value = []
+  sourceItemRefs.value = []
 })
 
 function scrollSourceIntoView(id) {
   var index = props.sources.map((e) => { return e.id; }).indexOf(id);
-  dashboarditemRefs.value[index].scrollToElement()
+  sourceItemRefs.value[index].scrollToElement()
 }
 
 defineExpose({ scrollSourceIntoView })

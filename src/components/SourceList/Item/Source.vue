@@ -30,7 +30,7 @@
       </div>
       <div class="dashboard-text flex-none lg:flex-1 lg:grow">{{ source.text }}</div>
       <div class="dashboard-tags flex-none">
-        <dashboard-item-tags :source-id="source.id" :tags="source.tags" />
+        <source-tags :source-id="source.id" :tags="source.tags" />
       </div>
       <div class="dashboard-actions flex-none">
         <el-button
@@ -58,7 +58,7 @@ import { ElButton, ElImage } from 'element-plus'
 import moment from 'moment'
 import { useSource } from '@/stores/sources'
 import { useAuth } from '@/stores/auth'
-import DashboardItemTags from './DashboardItemTags.vue';
+import SourceTags from './SourceTags.vue';
 import { ElMessage, ElMessageBox } from 'element-plus'
 
 const emit = defineEmits(['hovered', 'showOnMap'])

@@ -12,19 +12,19 @@
       </div>
     </el-col>
     <el-col :xs="24" :sm="18" :md="10" :lg="12" :xl="12">
-      <dashboard-item-editor
+      <source-editor
         v-if="showEditor.display"
         :default="showEditor.default"
         @submit="showEditor.display = false"
         @cancel="showEditor.display = false"
-      ></dashboard-item-editor>
-      <dashboard-list
+      ></source-editor>
+      <source-list
         ref="dashboardlistinstance"
         :hovered-source-id="hoveredSourceId"
         :sources="filteredSources"
         @hovered="updateHovered"
         @show-on-map="showIdOnMap"
-      ></dashboard-list>
+      ></source-list>
     </el-col>
     <el-col :xs="24" :sm="24" :md="10" :lg="8" :xl="8">
       <div class="affix-container-map">
@@ -37,27 +37,27 @@
           >
             <el-tab-pane label="Pinned" name="pinned">
               <div class="sticky-source-list">
-                <dashboard-list
+                <source-list
                   :hovered-source-id="hoveredSourceId"
                   :sources="sourceStore.getPinnedSources()"
                   single-column
                   @hovered="updateHovered"
                   @show-on-map="showIdOnMap"
-                ></dashboard-list>
+                ></source-list>
               </div>
             </el-tab-pane>
             <el-tab-pane label="Tags" name="tags">
               <div class="sticky-source-list-filter">
-                <dashboard-list-quick-filter v-model="quickFilter"></dashboard-list-quick-filter>
+                <source-list-quick-filter v-model="quickFilter"></source-list-quick-filter>
               </div>
               <div class="sticky-source-list with-borders">
-                <dashboard-list
+                <source-list
                   :hovered-source-id="hoveredSourceId"
                   :sources="sourceStore.getSourcesWithTags(quickFilter.tags)"
                   single-column
                   @hovered="updateHovered"
                   @show-on-map="showIdOnMap"
-                ></dashboard-list>
+                ></source-list>
               </div>
             </el-tab-pane>
             <el-tab-pane label="Map" name="map">
@@ -81,19 +81,19 @@
 
 <script setup>
 import { ref, onMounted, computed, defineProps } from 'vue'
-import AutoSaMap from '@/components/AutoSaMap.vue'
-import DashboardList from '@/components/Dashboard/DashboardList.vue';
 import { storeToRefs } from 'pinia'
 import { useSource } from '@/stores/sources'
-import DashboardItemEditor from './DashboardItemEditor.vue'
-import DashboardListQuickFilter from './DashboardListQuickFilter.vue'
 import moment from 'moment'
+import AutoSaMap from '@/components/AutoSaMap.vue'
+import SourceList from '@/components/SourceList/SourceList.vue';
+import SourceEditor from '@/components/SourceList/Item/SourceEditor.vue'
+import SourceListQuickFilter from '@/components/SourceList/SourceListQuickFilter.vue'
 import DashboardSettings from './Settings/DashboardSettings.vue';
 
 const hoveredSourceId = ref(1)
 const mapinstance = ref(null)
 const timeFilter = ref(null)
-const dashboardlistinstance = ref(null)
+const sourcelistinstance = ref(null)
 const sourceStore = useSource()
 const { sources } = storeToRefs(sourceStore)
 const showEditor = ref({
@@ -113,7 +113,7 @@ function updateHovered(id) {
 
 
 function scrollSourceIntoView(id) {
-  dashboardlistinstance.value.scrollSourceIntoView(id)
+  sourcelistinstance.value.scrollSourceIntoView(id)
 }
 
 function addSource() {
