@@ -83,6 +83,15 @@ const sourceData = [
     }
 ]
 
+const newSourceData = {
+    "interface": "twitter",
+    "source": "@newTwitterAccount",
+    "headline": "",
+    "text": "This source was newly created.",
+    "language": "en",
+    "timestamp": "2022-05-03T22:00:00Z"
+}
+
 
 const whoamiData = {
     "username": "admin",
@@ -153,4 +162,4 @@ const whoamiData = {
         { "id": 31, "name": "Can delete tagged item", "content_type_id": 8, "codename": "delete_taggeditem" },
         { "id": 32, "name": "Can view tagged item", "content_type_id": 8, "codename": "view_taggeditem" }]
 }
-export { whoamiData, sourceData }
+export { whoamiData, sourceData, newSourceData }

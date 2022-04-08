@@ -55,7 +55,7 @@ export const useSource = defineStore('source', {
       return AutoSaApi.createSource(data).then((r) => {
         if (r) {
           let newPosition = this.sources.push(r.data)
-          this.sourceIdDict[r.data.id] = newPosition
+          this.sourceIdDict[r.data.id] = newPosition - 1
         }
       })
     },
