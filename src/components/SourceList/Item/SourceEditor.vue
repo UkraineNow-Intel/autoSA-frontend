@@ -5,7 +5,7 @@
         Manually enter new source:
         <el-form ref="form" class="source-item-form" :model="model" @submit.prevent="createSource">
           <el-form-item prop="interface">
-            <el-select v-model="model.interface" placeholder="Select">
+            <el-select v-model="model.interface" placeholder="Select Interface">
               <el-option label="Website" value="website" />
               <el-option label="Twitter" value="twitter" />
               <el-option label="API" value="api" />
@@ -40,6 +40,8 @@
             />
           </el-form-item>
 
+          <map-picker :marker-position="markerPosition" style="width: 100%; height: 30vh; min-height: 400px;" @map-clicked="log"></map-picker>
+
           <el-form-item>
             <el-button
               :loading="loading"
@@ -64,12 +66,21 @@
 <script setup>
 import { ref, defineProps, defineEmits } from 'vue'
 import { useSource } from '@/stores/sources'
+import MapPicker from '@/components/MapPicker.vue'
 const sourceStore = useSource()
 
-
+function log(e){
+  markerPosition.value = e
+  model.value.locations = [{
+    "name": "test",
+    "point": "POINT (" + e.lat + " " + e.lng + ")"
+  }]
+}
 const emit = defineEmits(['cancel', 'submit'])
 
+const markerPosition = ref(undefined)
 const loading = ref(false)
+/*
 const model = ref({
   "interface": "",
   "source": "",
@@ -78,15 +89,30 @@ const model = ref({
   "language": "",
   "timestamp": "",
   "pinned": "false",
+  "locations": [],
   "translations": [],
   "tags": [],
 })
+*/
+const model = ref({
+  "interface": "website",
+  "source": "https://example.com",
+  "headline": "Test headline",
+  "text": "Test text",
+  "language": "en",
+  "timestamp": "2021-12-08 00:00:00",
+  "pinned": "false",
+  "locations": [],
+  "translations": [],
+  "tags": [],
+})
+
 
 async function createSource() {
   loading.value = true
   await sourceStore.createSource(model.value)
   loading.value = false
-  emit('submit')
+  //emit('submit')
 }
 
 defineProps({
