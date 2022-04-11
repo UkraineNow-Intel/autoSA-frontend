@@ -3,7 +3,10 @@
     <el-col :xs="24">
       <div class="dashboard-item border-2 rounded border-yellow-600">
         Manually enter new source:
-        <el-form ref="form" class="source-item-form" :model="model" @submit.prevent="createSource">
+        <el-form
+          ref="form" class="source-item-form" :model="model" @submit.prevent="createSource"
+          @keydown.enter.prevent=""
+        >
           <el-form-item prop="interface">
             <el-select v-model="model.interface" placeholder="Select Interface">
               <el-option label="Website" value="website" />
@@ -19,9 +22,7 @@
           </el-form-item>
           <el-form-item prop="text">
             <el-input
-              v-model="model.text"
-              type="textarea"
-              :autosize="{ minRows: 2, maxRows: 4 }"
+              v-model="model.text" type="textarea" :autosize="{ minRows: 2, maxRows: 4 }"
               placeholder="Text..."
             />
           </el-form-item>
@@ -33,34 +34,21 @@
             </el-select>
           </el-form-item>
           <el-form-item prop="timestamp">
-            <el-date-picker
-              v-model="model.timestamp"
-              type="datetime"
-              placeholder="Select date and time"
-            />
+            <el-date-picker v-model="model.timestamp" type="datetime" placeholder="Select date and time" />
           </el-form-item>
 
-          <map-picker :marker-position="markerPosition" style="width: 100%; height: 30vh; min-height: 400px;" @map-clicked="log"></map-picker>
+          <el-form-item>
+            <map-picker v-model="location" style="width: 100%;" height="40vh"></map-picker>
+          </el-form-item>
 
           <el-form-item>
-            <el-button
-              :loading="loading"
-              type="info"
-              block
-              @click="emit('cancel')"
-            >Cancel</el-button>
-            <el-button
-              :loading="loading"
-              type="primary"
-              native-type="submit"
-              block
-            >Create</el-button>
+            <el-button :loading="loading" type="info" block @click="emit('cancel')">Cancel</el-button>
+            <el-button :loading="loading" type="primary" native-type="submit" block>Create</el-button>
           </el-form-item>
         </el-form>
       </div>
     </el-col>
-    <hr />
-  </el-row>
+    <hr /></el-row>
 </template>
 
 <script setup>
@@ -69,16 +57,13 @@ import { useSource } from '@/stores/sources'
 import MapPicker from '@/components/MapPicker.vue'
 const sourceStore = useSource()
 
-function log(e){
-  markerPosition.value = e
-  model.value.locations = [{
-    "name": "test",
-    "point": "POINT (" + e.lat + " " + e.lng + ")"
-  }]
-}
 const emit = defineEmits(['cancel', 'submit'])
 
-const markerPosition = ref(undefined)
+const location = ref({
+  name: "",
+  lat: undefined,
+  lng: undefined
+})
 const loading = ref(false)
 /*
 const model = ref({
@@ -109,6 +94,10 @@ const model = ref({
 
 
 async function createSource() {
+  model.value.locations[0] = {
+    name: location.value.name,
+    point: "POINT (" + location.value.lat + " " + location.value.lng + ")"
+  }
   loading.value = true
   await sourceStore.createSource(model.value)
   loading.value = false

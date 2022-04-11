@@ -1,15 +1,14 @@
 import axios from "axios";
 import { ElNotification } from 'element-plus'
 
-axios.defaults.xsrfHeaderName = 'x-csrftoken'
-axios.defaults.xsrfCookieName = 'csrftoken'
-axios.defaults.withCredentials = true
-
 const instance = axios.create({
   baseURL: '',
   headers: {
     "Content-type": "application/json"
-  }
+  },
+  xsrfHeaderName: 'x-csrftoken',
+  xsrfCookieName: 'csrftoken',
+  withCredentials: true
 });
 
 instance.interceptors.response.use(function (response) {
