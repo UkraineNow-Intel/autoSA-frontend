@@ -30,6 +30,8 @@
       </el-form-item>
 
       <el-form-item>
+        <div style="width: 100%"><b>Location</b></div>
+        <div style="width: 100%">Please enter a location and press enter, or click on a map to choose a location manually.</div>
         <map-picker ref="mappickerinstance" v-model="location" style="width: 100%;" height="40vh"></map-picker>
       </el-form-item>
 

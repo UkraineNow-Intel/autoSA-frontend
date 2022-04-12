@@ -1,65 +1,64 @@
 <template>
-  <el-row :gutter="10">
-    <el-col :xs="24" :sm="6" :md="4" :lg="4" :xl="4">
-      <div class="affix-container-settings">
-        <el-affix target=".affix-container-settings" :offset="10" style="text-align: left; width: 100%">
-          <dashboard-settings @add-source="showSourceEditor"></dashboard-settings>
-        </el-affix>
-      </div>
-    </el-col>
-    <el-col :xs="24" :sm="18" :md="10" :lg="12" :xl="12">
-      <el-row v-if="sourceEditorOptions.display" :gutter="10" style="margin: 10px">
-        <el-col :xs="24">
-          <div class="dashboard-item border-2 rounded border-yellow-600">
-            <source-editor
-              :loading="sourceEditorOptions.loading" @submit="createSource"
-              @cancel="sourceEditorOptions.display = false"
-            ></source-editor>
-          </div>
-        </el-col>
-      </el-row>
-      <source-list
-        ref="sourcelistinstance" :hovered-source-id="hoveredSourceId" :sources="filteredSources"
-        @hovered="updateHovered" @show-on-map="showIdOnMap" 
-        @tag-clicked="tagClicked"
-      ></source-list>
-    </el-col>
-    <el-col :xs="24" :sm="24" :md="10" :lg="8" :xl="8">
-      <div class="affix-container-map">
-        <el-affix target=".affix-container-map" style="width: 100%;" :offset="10">
-          <el-tabs v-model="currentTab" type="border-card" style="margin: 1em;" @tab-click="invalidateMap">
-            <el-tab-pane label="Pinned" name="pinned">
-              <div class="sticky-source-list">
-                <source-list
-                  :hovered-source-id="hoveredSourceId" :sources="sourceStore.getPinnedSources()"
-                  single-column @hovered="updateHovered" @show-on-map="showIdOnMap"
-                ></source-list>
-              </div>
-            </el-tab-pane>
-            <el-tab-pane label="Tags" name="tags">
-              <div class="sticky-source-list-filter">
-                <source-list-quick-filter v-model="quickFilter"></source-list-quick-filter>
-              </div>
-              <div class="sticky-source-list with-borders">
-                <source-list
-                  :hovered-source-id="hoveredSourceId"
-                  :sources="sourceStore.getSourcesWithTags(quickFilter.tags)" single-column @hovered="updateHovered"
-                  @show-on-map="showIdOnMap"
-                ></source-list>
-              </div>
-            </el-tab-pane>
-            <el-tab-pane label="Map" name="map">
-              <auto-sa-map
-                ref="mapinstance" style="width: 100%; max-width: 1000px; height: 60vh;"
-                :sources="filteredSources" :hovered-source-id="hoveredSourceId" @hovered="updateHovered"
-                @marker-clicked="scrollSourceIntoView"
-              ></auto-sa-map>
-            </el-tab-pane>
-          </el-tabs>
-        </el-affix>
-      </div>
-    </el-col>
-  </el-row>
+  <div>
+    <el-row :gutter="10">
+      <el-col :xs="24" :sm="6" :md="4" :lg="4" :xl="4">
+        <div class="affix-container-settings">
+          <el-affix target=".affix-container-settings" :offset="10" style="text-align: left; width: 100%">
+            <dashboard-settings @add-source="showSourceEditor"></dashboard-settings>
+          </el-affix>
+        </div>
+      </el-col>
+      <el-col :xs="24" :sm="18" :md="10" :lg="12" :xl="12">
+        <source-list
+          ref="sourcelistinstance" :hovered-source-id="hoveredSourceId" :sources="filteredSources"
+          @hovered="updateHovered" @show-on-map="showIdOnMap" 
+          @tag-clicked="tagClicked"
+        ></source-list>
+      </el-col>
+      <el-col :xs="24" :sm="24" :md="10" :lg="8" :xl="8">
+        <div class="affix-container-map">
+          <el-affix target=".affix-container-map" style="width: 100%;" :offset="10">
+            <el-tabs v-model="currentTab" type="border-card" style="margin: 1em;" @tab-click="invalidateMap">
+              <el-tab-pane label="Pinned" name="pinned">
+                <div class="sticky-source-list">
+                  <source-list
+                    :hovered-source-id="hoveredSourceId" :sources="sourceStore.getPinnedSources()"
+                    single-column @hovered="updateHovered" @show-on-map="showIdOnMap"
+                  ></source-list>
+                </div>
+              </el-tab-pane>
+              <el-tab-pane label="Tags" name="tags">
+                <div class="sticky-source-list-filter">
+                  <source-list-quick-filter v-model="quickFilter"></source-list-quick-filter>
+                </div>
+                <div class="sticky-source-list with-borders">
+                  <source-list
+                    :hovered-source-id="hoveredSourceId"
+                    :sources="sourceStore.getSourcesWithTags(quickFilter.tags)" single-column @hovered="updateHovered"
+                    @show-on-map="showIdOnMap"
+                  ></source-list>
+                </div>
+              </el-tab-pane>
+              <el-tab-pane label="Map" name="map">
+                <auto-sa-map
+                  ref="mapinstance" style="width: 100%; max-width: 1000px; height: 60vh;"
+                  :sources="filteredSources" :hovered-source-id="hoveredSourceId" @hovered="updateHovered"
+                  @marker-clicked="scrollSourceIntoView"
+                ></auto-sa-map>
+              </el-tab-pane>
+            </el-tabs>
+          </el-affix>
+        </div>
+      </el-col>
+    </el-row>
+    <el-dialog v-model="sourceEditorOptions.display" title="Create Source">
+      <source-editor
+        :loading="sourceEditorOptions.loading"
+        @submit="createSource"
+        @cancel="sourceEditorOptions.display = false"
+      ></source-editor>
+    </el-dialog>
+  </div>
 </template>
 
 
@@ -205,8 +204,4 @@ const filteredSources = computed(() => {
   border-radius: 0 0 5px 5px;
 }
 
-.dashboard-item {
-  @apply bg-slate-200 p-5 m-3;
-  width: 100%;
-}
 </style>

@@ -39,8 +39,8 @@ defineExpose({ setCenter, invalidateSize })
 async function handleInputConfirm() {
   const result = await coordinatesByAdress(data.value.name)
   center.value = [result.lat, result.lon]
-  data.value.lat = result.lat
-  data.value.lng = result.lon
+  data.value.lat = parseFloat(result.lat)
+  data.value.lng = parseFloat(result.lon)
   data.value.name = result.display_name
 }
 
