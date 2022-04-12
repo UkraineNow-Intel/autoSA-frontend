@@ -53,7 +53,7 @@ const center = ref([48.5, 32.2])
 function zoomToId(id) {
   const locations = getSourceLocations(id)
   if (locations.length > 0) {
-    center.value = [locations[0].lat, locations[0].lng]
+    center.value = [locations[0].point.coordinates[0], locations[0].point.coordinates[1]]
     zoom.value = 10
   } else {
     console.log("Location with id " + id + " was not found!")

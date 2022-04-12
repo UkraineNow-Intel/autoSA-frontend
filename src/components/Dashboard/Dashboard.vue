@@ -19,7 +19,7 @@
         </el-col>
       </el-row>
       <source-list
-        ref="dashboardlistinstance" :hovered-source-id="hoveredSourceId" :sources="filteredSources"
+        ref="sourcelistinstance" :hovered-source-id="hoveredSourceId" :sources="filteredSources"
         @hovered="updateHovered" @show-on-map="showIdOnMap"
       ></source-list>
     </el-col>
@@ -115,7 +115,12 @@ async function createSource(sourceData) {
 }
 
 function showIdOnMap(id) {
-  mapinstance.value.zoomToId(id)
+  currentTab.value = "map"
+  invalidateMap({paneName: "map"})
+  window.setTimeout(() => {
+    invalidateMap({paneName: "map"})
+    mapinstance.value.zoomToId(id)
+  }, 100)
 }
 
 function invalidateMap(tabname) {
