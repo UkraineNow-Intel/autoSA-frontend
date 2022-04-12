@@ -120,6 +120,9 @@ function showIdOnMap(id) {
   window.setTimeout(() => {
     invalidateMap({paneName: "map"})
     mapinstance.value.zoomToId(id)
+    window.setTimeout(() => {
+      mapinstance.value.zoomToId(id)
+    }, 200)
   }, 100)
 }
 

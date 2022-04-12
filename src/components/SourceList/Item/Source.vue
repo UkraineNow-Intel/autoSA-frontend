@@ -143,6 +143,7 @@ defineExpose({ scrollToElement })
   @apply bg-slate-200 p-5 m-3;
   width: 100%;
   max-height: 90vh;
+  min-width: 250px;
 }
 
 .dashboard-item.fixed-height {

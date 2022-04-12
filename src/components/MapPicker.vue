@@ -19,7 +19,7 @@
 </template>
 
 <script setup>
-import { ref, defineProps, defineEmits, computed } from 'vue'
+import { ref, defineProps, defineEmits, defineExpose, computed } from 'vue'
 import "leaflet/dist/leaflet.css"
 import { LMap, LTileLayer, LMarker, LIcon } from "@vue-leaflet/vue-leaflet";
 import MarkerIcon from '@/assets/map_icon.svg'
@@ -34,6 +34,7 @@ const data = computed({
 });
 
 const emit = defineEmits(['update', 'update:modelValue'])
+defineExpose({ setCenter, invalidateSize })
 
 async function handleInputConfirm() {
   const result = await coordinatesByAdress(data.value.name)
@@ -45,6 +46,12 @@ async function handleInputConfirm() {
 
 function setCenter(newCenter) {
   center.value = newCenter
+}
+
+function invalidateSize() {
+  window.setTimeout(() => {
+    mapinstance.value.leafletObject.invalidateSize()
+  }, 1000)
 }
 
 const props = defineProps({
