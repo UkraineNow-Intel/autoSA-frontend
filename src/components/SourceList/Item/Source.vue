@@ -43,12 +43,20 @@
           @click="togglePin"
         >{{ source.pinned ? 'Unpin' : 'Pin' }}</el-button>
         <el-button
+          v-if="authStore.hasPermission('change_source')"
+          :loading="changeLoading"
+          @click="showChangeDialog = !showChangeDialog"
+        >Edit</el-button>
+        <el-button
           v-if="authStore.hasPermission('delete_source')"
           :loading="deleteLoading"
           @click="confirmDelete"
-        >Delete Item</el-button>
+        >Delete</el-button>
       </div>
     </div>
+    <el-dialog v-model="showChangeDialog" title="Edit Item">
+      <source-editor :default-data="source" :loading="editorLoading" button-text="Edit Source" @cancel="showChangeDialog = false" @submit="changeSource"></source-editor>
+    </el-dialog>
   </div>
 </template>
 
@@ -60,12 +68,16 @@ import { useSource } from '@/stores/sources'
 import { useAuth } from '@/stores/auth'
 import SourceTags from './SourceTags.vue';
 import { ElMessage, ElMessageBox } from 'element-plus'
+import SourceEditor from './SourceEditor.vue'
 
 const emit = defineEmits(['hovered', 'showOnMap'])
 
 const item = ref(null)
 const pinningLoading = ref(false)
+const changeLoading = ref(false)
 const deleteLoading = ref(false)
+const showChangeDialog = ref(false)
+const editorLoading = ref(false)
 const sourceStore = useSource()
 const authStore = useAuth()
 
@@ -83,6 +95,14 @@ async function togglePin() {
   pinningLoading.value = true
   await sourceStore.changeSource(props.source["id"], { 'pinned': !props.source["pinned"] })
   pinningLoading.value = false
+}
+
+async function changeSource(sourceData) {
+  editorLoading.value = true
+  await sourceStore.changeSource(sourceData.id, sourceData).then(() => {
+    showChangeDialog.value = false
+  })
+  editorLoading.value = false
 }
 
 
@@ -152,5 +172,6 @@ defineExpose({ scrollToElement })
 .dashboard-tags,
 .dashboard-actions {
   padding: 5px 0;
+  
 }
 </style>

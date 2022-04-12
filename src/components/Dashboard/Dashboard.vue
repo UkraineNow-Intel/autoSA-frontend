@@ -2,47 +2,36 @@
   <el-row :gutter="10">
     <el-col :xs="24" :sm="6" :md="4" :lg="4" :xl="4">
       <div class="affix-container-settings">
-        <el-affix
-          target=".affix-container-settings"
-          :offset="10"
-          style="text-align: left; width: 100%"
-        >
-          <dashboard-settings @add-source="addSource"></dashboard-settings>
+        <el-affix target=".affix-container-settings" :offset="10" style="text-align: left; width: 100%">
+          <dashboard-settings @add-source="showSourceEditor"></dashboard-settings>
         </el-affix>
       </div>
     </el-col>
     <el-col :xs="24" :sm="18" :md="10" :lg="12" :xl="12">
-      <source-editor
-        v-if="showEditor.display"
-        :default="showEditor.default"
-        @submit="showEditor.display = false"
-        @cancel="showEditor.display = false"
-      ></source-editor>
+      <el-row v-if="sourceEditorOptions.display" :gutter="10" style="margin: 10px">
+        <el-col :xs="24">
+          <div class="dashboard-item border-2 rounded border-yellow-600">
+            <source-editor
+              :loading="sourceEditorOptions.loading" @submit="createSource"
+              @cancel="sourceEditorOptions.display = false"
+            ></source-editor>
+          </div>
+        </el-col>
+      </el-row>
       <source-list
-        ref="dashboardlistinstance"
-        :hovered-source-id="hoveredSourceId"
-        :sources="filteredSources"
-        @hovered="updateHovered"
-        @show-on-map="showIdOnMap"
+        ref="dashboardlistinstance" :hovered-source-id="hoveredSourceId" :sources="filteredSources"
+        @hovered="updateHovered" @show-on-map="showIdOnMap"
       ></source-list>
     </el-col>
     <el-col :xs="24" :sm="24" :md="10" :lg="8" :xl="8">
       <div class="affix-container-map">
         <el-affix target=".affix-container-map" style="width: 100%;" :offset="10">
-          <el-tabs
-            v-model="currentTab"
-            type="border-card"
-            style="margin: 1em;"
-            @tab-click="invalidateMap"
-          >
+          <el-tabs v-model="currentTab" type="border-card" style="margin: 1em;" @tab-click="invalidateMap">
             <el-tab-pane label="Pinned" name="pinned">
               <div class="sticky-source-list">
                 <source-list
-                  :hovered-source-id="hoveredSourceId"
-                  :sources="sourceStore.getPinnedSources()"
-                  single-column
-                  @hovered="updateHovered"
-                  @show-on-map="showIdOnMap"
+                  :hovered-source-id="hoveredSourceId" :sources="sourceStore.getPinnedSources()"
+                  single-column @hovered="updateHovered" @show-on-map="showIdOnMap"
                 ></source-list>
               </div>
             </el-tab-pane>
@@ -53,20 +42,15 @@
               <div class="sticky-source-list with-borders">
                 <source-list
                   :hovered-source-id="hoveredSourceId"
-                  :sources="sourceStore.getSourcesWithTags(quickFilter.tags)"
-                  single-column
-                  @hovered="updateHovered"
+                  :sources="sourceStore.getSourcesWithTags(quickFilter.tags)" single-column @hovered="updateHovered"
                   @show-on-map="showIdOnMap"
                 ></source-list>
               </div>
             </el-tab-pane>
             <el-tab-pane label="Map" name="map">
               <auto-sa-map
-                ref="mapinstance"
-                style="width: 100%; max-width: 1000px; height: 60vh;"
-                :sources="filteredSources"
-                :hovered-source-id="hoveredSourceId"
-                @hovered="updateHovered"
+                ref="mapinstance" style="width: 100%; max-width: 1000px; height: 60vh;"
+                :sources="filteredSources" :hovered-source-id="hoveredSourceId" @hovered="updateHovered"
                 @marker-clicked="scrollSourceIntoView"
               ></auto-sa-map>
             </el-tab-pane>
@@ -96,9 +80,9 @@ const timeFilter = ref(null)
 const sourcelistinstance = ref(null)
 const sourceStore = useSource()
 const { sources } = storeToRefs(sourceStore)
-const showEditor = ref({
+const sourceEditorOptions = ref({
   display: false,
-  default: {}
+  loading: false
 })
 const quickFilter = ref({
   pinned: 'na',
@@ -111,18 +95,24 @@ function updateHovered(id) {
   hoveredSourceId.value = parseInt(id)
 }
 
-
 function scrollSourceIntoView(id) {
   sourcelistinstance.value.scrollSourceIntoView(id)
 }
 
-function addSource() {
-  showEditor.value = {
+function showSourceEditor() {
+  sourceEditorOptions.value = {
     display: true,
-    default: {}
+    loading: false
   }
 }
 
+async function createSource(sourceData) {
+  sourceEditorOptions.value.loading = true
+  await sourceStore.createSource(sourceData).then(() => {
+    sourceEditorOptions.value.display = false
+  })
+  sourceEditorOptions.value.loading = false
+}
 
 function showIdOnMap(id) {
   mapinstance.value.zoomToId(id)
@@ -180,11 +170,13 @@ const filteredSources = computed(() => {
   height: 100%;
   border-radius: 4px;
 }
+
 .sticky-source-list-filter {
   padding: 0.2rem 1rem;
   border: 1px solid lightgrey;
   border-radius: 5px 5px 0 0;
 }
+
 .sticky-source-list {
   max-height: 70vh;
   overflow-y: scroll;
@@ -195,5 +187,10 @@ const filteredSources = computed(() => {
   border: 1px solid lightgrey;
   border-top: 0;
   border-radius: 0 0 5px 5px;
+}
+
+.dashboard-item {
+  @apply bg-slate-200 p-5 m-3;
+  width: 100%;
 }
 </style>

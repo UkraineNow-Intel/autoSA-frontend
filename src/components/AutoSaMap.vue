@@ -83,12 +83,10 @@ const markers = computed(() => {
     props.sources.forEach(source => {
       if ("locations" in source) {
         source["locations"].forEach(loc => {
-          let lat = loc.point.split(" ")[1].replace("(", "")
-          let lng = loc.point.split(" ")[2].replace(")", "")
           allDataPoints.push({
             id: source.id,
             text: source.text,
-            coordinates: [lat, lng],
+            coordinates: loc.point.coordinates,
             size: props.hoveredSourceId == source.id ? [45, 45] : [25, 25],
             anchor: props.hoveredSourceId == source.id ? [13.5, 40] : [7.5, 22.2]
           })

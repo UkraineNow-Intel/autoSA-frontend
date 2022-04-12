@@ -43,6 +43,6 @@ describe('Source List and Source Item components', () => {
         const wrapper = mount(SourceList, mountSettings)
         const sourceItems = wrapper.findAllComponents(Source)
         const buttons = sourceItems[0].findAllComponents(ElButton)
-        expect(buttons).toHaveLength(3) // has three buttons: New Tag, Unpin, Delete Item
+        expect(buttons).toHaveLength(4) // has three buttons: New Tag, Unpin, Edit, Delete
     })
 })
