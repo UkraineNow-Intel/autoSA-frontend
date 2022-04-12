@@ -17,6 +17,7 @@
         style="display: inline-block"
         @hovered="(a) => emit('hovered', a)"
         @show-on-map="(a) => emit('showOnMap', a)"
+        @tag-clicked="(tag) => emit('tagClicked', tag)"
       ></source-item>
     </el-col>
     <el-col v-if="sources.length == 0" :xs="24">
@@ -38,7 +39,7 @@ import { ElRow, ElCol } from 'element-plus'
 
 const sourceItemRefs = ref([])
 
-const emit = defineEmits(['hovered', 'showOnMap'])
+const emit = defineEmits(['hovered', 'showOnMap', 'tagClicked'])
 
 const props = defineProps({
   sources: { type: Array, required: false, default: () => [] },

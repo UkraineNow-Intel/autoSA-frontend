@@ -30,7 +30,7 @@
       </div>
       <div class="dashboard-text flex-none lg:flex-1 lg:grow">{{ source.text }}</div>
       <div class="dashboard-tags flex-none">
-        <source-tags :source-id="source.id" :tags="source.tags" />
+        <source-tags :source-id="source.id" :tags="source.tags" @tag-clicked="(tag) => emit('tagClicked', tag)" />
       </div>
       <div class="dashboard-actions flex-none">
         <el-button
@@ -70,7 +70,7 @@ import SourceTags from './SourceTags.vue';
 import { ElMessage, ElMessageBox } from 'element-plus'
 import SourceEditor from './SourceEditor.vue'
 
-const emit = defineEmits(['hovered', 'showOnMap'])
+const emit = defineEmits(['hovered', 'showOnMap', 'tagClicked'])
 
 const item = ref(null)
 const pinningLoading = ref(false)

@@ -20,7 +20,8 @@
       </el-row>
       <source-list
         ref="sourcelistinstance" :hovered-source-id="hoveredSourceId" :sources="filteredSources"
-        @hovered="updateHovered" @show-on-map="showIdOnMap"
+        @hovered="updateHovered" @show-on-map="showIdOnMap" 
+        @tag-clicked="tagClicked"
       ></source-list>
     </el-col>
     <el-col :xs="24" :sm="24" :md="10" :lg="8" :xl="8">
@@ -76,10 +77,9 @@ import DashboardSettings from './Settings/DashboardSettings.vue';
 
 const hoveredSourceId = ref(1)
 const mapinstance = ref(null)
+const currentTab = ref('pinned')
 const timeFilter = ref(null)
 const sourcelistinstance = ref(null)
-const sourceStore = useSource()
-const { sources } = storeToRefs(sourceStore)
 const sourceEditorOptions = ref({
   display: false,
   loading: false
@@ -89,7 +89,10 @@ const quickFilter = ref({
   tags: []
 })
 
-const currentTab = ref('pinned')
+
+const sourceStore = useSource()
+const { sources } = storeToRefs(sourceStore)
+
 
 function updateHovered(id) {
   hoveredSourceId.value = parseInt(id)
@@ -104,6 +107,11 @@ function showSourceEditor() {
     display: true,
     loading: false
   }
+}
+
+function tagClicked(tag){
+  currentTab.value = "tags"
+  quickFilter.value.tags = [tag]
 }
 
 async function createSource(sourceData) {
