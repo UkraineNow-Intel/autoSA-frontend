@@ -96,7 +96,6 @@ onMounted(() => {
       location.value.name = model.value.locations[0].name
       location.value.lat = model.value.locations[0].point.coordinates[0]
       location.value.lng = model.value.locations[0].point.coordinates[1]
-      console.log("done")
 
       mappickerinstance.value.invalidateSize()
       window.setTimeout(() => {

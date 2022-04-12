@@ -3,30 +3,35 @@
     <div style="display: inline-block; text-align: left; margin-bottom: 20px; width: 100%;">
       <p style="padding: 5px">Time</p>
       <el-date-picker
-        v-model="value"
+        v-model="currentValue"
         type="datetimerange"
         :shortcuts="shortcuts"
         range-separator="To"
         start-placeholder="Start date"
         end-placeholder="End date"
         style="width: 100%"
-        @change="emitChange"
       />
     </div>
   </div>
 </template>
 
 <script setup>
-import {ref, defineEmits } from 'vue'
+import {computed, defineProps, defineEmits } from 'vue'
 import { ElDatePicker } from 'element-plus'
 
-const value = ref('')
+const currentValue = computed({
+  get: () => props.modelValue,
+  set: (val) => {
+    emit('update:modelValue', val)
+  }
+});
 
-const emit = defineEmits(['change'])
+const props = defineProps({
+  modelValue: {type: Array, required: false, default: () => []}
+})
 
-function emitChange(){
-  emit('change', value.value)
-}
+const emit = defineEmits(['update:modelValue'])
+
 
 const shortcuts = [
   {

@@ -4,15 +4,14 @@
       <el-col :xs="24" :sm="6" :md="4" :lg="4" :xl="4">
         <div class="affix-container-settings">
           <el-affix target=".affix-container-settings" :offset="10" style="text-align: left; width: 100%">
-            <dashboard-settings @add-source="showSourceEditor"></dashboard-settings>
+            <dashboard-settings v-model="dashboardOptions" @add-source="showSourceEditor"></dashboard-settings>
           </el-affix>
         </div>
       </el-col>
       <el-col :xs="24" :sm="18" :md="10" :lg="12" :xl="12">
         <source-list
           ref="sourcelistinstance" :hovered-source-id="hoveredSourceId" :sources="filteredSources"
-          @hovered="updateHovered" @show-on-map="showIdOnMap" 
-          @tag-clicked="tagClicked"
+          @hovered="updateHovered" @show-on-map="showIdOnMap" @tag-clicked="tagClicked"
         ></source-list>
       </el-col>
       <el-col :xs="24" :sm="24" :md="10" :lg="8" :xl="8">
@@ -29,13 +28,13 @@
               </el-tab-pane>
               <el-tab-pane label="Tags" name="tags">
                 <div class="sticky-source-list-filter">
-                  <source-list-quick-filter v-model="quickFilter"></source-list-quick-filter>
+                  <source-list-quick-filter v-model="sidenavOptions"></source-list-quick-filter>
                 </div>
                 <div class="sticky-source-list with-borders">
                   <source-list
                     :hovered-source-id="hoveredSourceId"
-                    :sources="sourceStore.getSourcesWithTags(quickFilter.tags)" single-column @hovered="updateHovered"
-                    @show-on-map="showIdOnMap"
+                    :sources="sourceStore.getSourcesWithTags(sidenavOptions.tags)" single-column
+                    @hovered="updateHovered" @show-on-map="showIdOnMap"
                   ></source-list>
                 </div>
               </el-tab-pane>
@@ -53,8 +52,7 @@
     </el-row>
     <el-dialog v-model="sourceEditorOptions.display" title="Create Source">
       <source-editor
-        :loading="sourceEditorOptions.loading"
-        @submit="createSource"
+        :loading="sourceEditorOptions.loading" @submit="createSource"
         @cancel="sourceEditorOptions.display = false"
       ></source-editor>
     </el-dialog>
@@ -65,9 +63,7 @@
 
 <script setup>
 import { ref, onMounted, computed, defineProps } from 'vue'
-import { storeToRefs } from 'pinia'
 import { useSource } from '@/stores/sources'
-import moment from 'moment'
 import AutoSaMap from '@/components/AutoSaMap.vue'
 import SourceList from '@/components/SourceList/SourceList.vue';
 import SourceEditor from '@/components/SourceList/Item/SourceEditor.vue'
@@ -77,21 +73,28 @@ import DashboardSettings from './Settings/DashboardSettings.vue';
 const hoveredSourceId = ref(1)
 const mapinstance = ref(null)
 const currentTab = ref('pinned')
-const timeFilter = ref(null)
 const sourcelistinstance = ref(null)
 const sourceEditorOptions = ref({
   display: false,
   loading: false
 })
-const quickFilter = ref({
+const sidenavOptions = ref({
   pinned: 'na',
   tags: []
 })
 
+const dashboardOptions = ref({
+  filters: {
+    time: null
+  },
+  sorting: {
+    by: "time",
+    reverse: false
+  }
+})
+
 
 const sourceStore = useSource()
-const { sources } = storeToRefs(sourceStore)
-
 
 function updateHovered(id) {
   hoveredSourceId.value = parseInt(id)
@@ -108,9 +111,9 @@ function showSourceEditor() {
   }
 }
 
-function tagClicked(tag){
+function tagClicked(tag) {
   currentTab.value = "tags"
-  quickFilter.value.tags = [tag]
+  sidenavOptions.value.tags = [tag]
 }
 
 async function createSource(sourceData) {
@@ -123,9 +126,9 @@ async function createSource(sourceData) {
 
 function showIdOnMap(id) {
   currentTab.value = "map"
-  invalidateMap({paneName: "map"})
+  invalidateMap({ paneName: "map" })
   window.setTimeout(() => {
-    invalidateMap({paneName: "map"})
+    invalidateMap({ paneName: "map" })
     mapinstance.value.zoomToId(id)
     window.setTimeout(() => {
       mapinstance.value.zoomToId(id)
@@ -149,24 +152,17 @@ onMounted(() => {
 })
 
 const filteredSources = computed(() => {
-  if (sources.value && sources.value.length > 0) {
+  const sources = sourceStore.getSources(dashboardOptions.value)
+  if (sources && sources.length > 0) {
     let allDataPoints = []
-    sources.value.forEach(source => {
+    sources.forEach(source => {
       const currentQuery = props.searchQuery.toLowerCase()
       if (
-        (
-          currentQuery == ''
-          || source["text"].toLowerCase().includes(currentQuery)
-          || source["tags"].includes(currentQuery)
-          || source["headline"].toLowerCase().includes(currentQuery)
-          || source["source"].toLowerCase().includes(currentQuery)
-        ) && (
-          !timeFilter.value
-          || (
-            moment(timeFilter.value[0]).isBefore(moment(source["timestamp"]))
-            && moment(timeFilter.value[1]).isAfter(moment(source["timestamp"]))
-          )
-        )
+        currentQuery == ''
+        || source["text"].toLowerCase().includes(currentQuery)
+        || source["tags"].includes(currentQuery)
+        || source["headline"].toLowerCase().includes(currentQuery)
+        || source["source"].toLowerCase().includes(currentQuery)
       ) {
         allDataPoints.push(source)
       }
@@ -203,5 +199,4 @@ const filteredSources = computed(() => {
   border-top: 0;
   border-radius: 0 0 5px 5px;
 }
-
 </style>

@@ -19,7 +19,11 @@
       ]"
     ></dashboard-settings-box>-->
     <!--<hr style="max-width: 50%; margin: 10px auto;" />-->
-    <time-selector @change="(x) => { timeFilter = x }" />
+    <time-selector v-model="currentOptions.filters.time" />
+    <hr style="max-width: 80%; margin: 10px auto; border-top-width: 2px;" />
+    <p style="padding: 5px; font-weight: bold; font-size: 1.2em;">Sort</p>
+    <sorting-selector v-model="currentOptions.sorting" />
+
     <hr v-if="authStore.hasPermission('add_source')" style="max-width: 80%; margin: 10px auto; border-top-width: 2px;" />
     <div v-if="authStore.hasPermission('add_source')">
       <p style="padding: 5px; font-weight: bold; font-size: 1.2em;">Actions</p>
@@ -31,14 +35,25 @@
 
 
 <script setup>
-import { ref, defineEmits} from 'vue'
+import { defineEmits, defineProps, computed } from 'vue'
 // import DashboardSettingsBox from './DashboardSettingsBox.vue';
 import TimeSelector from './TimeSelector.vue';
+import SortingSelector from './SortingSelector.vue';
 import { useAuth } from '@/stores/auth'
 
 const authStore = useAuth()
-const emit = defineEmits(['addSource'])
-const timeFilter = ref(null)
+const emit = defineEmits(['update:modelValue', 'addSource'])
+
+const currentOptions = computed({
+  get: () => props.modelValue,
+  set: (val) => {
+    emit('update:modelValue', val)
+  }
+});
+
+const props = defineProps({
+  modelValue: {type: Object, required: true}
+})
 
 </script>
 

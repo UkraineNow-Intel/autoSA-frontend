@@ -1,5 +1,18 @@
 import { defineStore } from 'pinia'
 import AutoSaApi from "@/api/api";
+import moment from 'moment'
+
+function sortList(listOfSources, sorting = {by: 'time', reverse: false}){
+  if (sorting.by == "id"){
+    listOfSources.sort((a, b) => (a.id > b.id) ? 1 : -1)
+  } else {
+    listOfSources.sort((a, b) => (moment(a.timestamp) < moment(b.timestamp)) ? 1 : -1)
+  }
+  if (sorting.reverse){
+    listOfSources.reverse()
+  }
+  return listOfSources
+}
 
 export const useSource = defineStore('source', {
   state: () => {
@@ -19,16 +32,45 @@ export const useSource = defineStore('source', {
       });
       return Array.from(alltags)
     },
+    getSourcesByDate(state) {
+      return (dateOptions) => {
+        if (state.sources.length > 0) {
+          let allDataPoints = []
+          state.sources.forEach(source => {
+            if (
+              !dateOptions
+              || (
+                moment(dateOptions[0]).isBefore(moment(source["timestamp"]))
+                && moment(dateOptions[1]).isAfter(moment(source["timestamp"]))
+              )
+            ) {
+              allDataPoints.push(source)
+            }
+          });
+          return allDataPoints
+        }
+        return []
+      }
+    },
+    getSources() {
+      return (options) => {
+        let resultSources = this.getSourcesByDate(options.filters.time)
+        sortList(resultSources, options.sorting)
+        return resultSources
+      }
+    },
     getSourcesWithTags(state) {
       return (tags) => {
-        return state.sources.filter((source) => {
+        let listOfSources = state.sources.filter((source) => {
           return source.tags.filter(tag => tags.includes(tag)).length > 0
         })
+        return sortList(listOfSources)
+
       }
     },
     getPinnedSources(state) {
       return () => {
-        return state.sources.filter((x) => x.pinned);
+        return sortList(state.sources.filter((x) => x.pinned));
       }
     }
   },
