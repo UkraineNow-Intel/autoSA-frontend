@@ -70,5 +70,15 @@ class AutoSaApi {
     deleteSource(id) {
         return http.delete(`/api/sources/${id}`)
     }
+
+    /**
+     * triggers the backend to get new sources from e.g. twitter, telegram etc.
+     */
+    refreshSources(overwriteExisting = false) {
+        // return info on how man sources were added
+        return http.get(`/api/refresh/`, { "overwrite": overwriteExisting }).then((response) => {
+            return response.data
+        })
+    }
 }
 export default new AutoSaApi();

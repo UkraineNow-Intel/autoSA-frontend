@@ -28,6 +28,7 @@
     <div v-if="authStore.hasPermission('add_source')">
       <p style="padding: 5px; font-weight: bold; font-size: 1.2em;">Actions</p>
       <el-button @click="(x) => emit('addSource', x)">Add Source</el-button>
+      <el-button :loading="refreshLoading" @click="refreshSources">Refresh Sources</el-button>
     </div>
   </div>
 </template>
@@ -35,13 +36,19 @@
 
 
 <script setup>
-import { defineEmits, defineProps, computed } from 'vue'
+import { ref, defineEmits, defineProps, computed } from 'vue'
 // import DashboardSettingsBox from './DashboardSettingsBox.vue';
 import TimeSelector from './TimeSelector.vue';
 import SortingSelector from './SortingSelector.vue';
 import { useAuth } from '@/stores/auth'
+import { useSource } from '@/stores/sources'
+import AutoSaApi from "@/api/api";
+import { ElNotification } from 'element-plus'
 
+
+const refreshLoading = ref(false)
 const authStore = useAuth()
+const sourceStore = useSource()
 const emit = defineEmits(['update:modelValue', 'addSource'])
 
 const currentOptions = computed({
@@ -54,6 +61,22 @@ const currentOptions = computed({
 const props = defineProps({
   modelValue: {type: Object, required: true}
 })
+
+function refreshSources(){
+  refreshLoading.value = true
+  AutoSaApi.refreshSources().then((response) => {
+    refreshLoading.value = false
+    console.log("test", response)
+    ElNotification({
+        title: 'Refresh completed',
+        message: response.newly_added == 0 ? 'No new sources were found' : `Newly added: ${response.newly_added}`,
+        type: 'success',
+    })
+    if (response.newly_added != 0){
+      sourceStore.getSourcesFromApi()
+    }
+  })
+}
 
 </script>
 
