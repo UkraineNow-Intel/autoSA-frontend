@@ -1,5 +1,18 @@
 import { defineStore } from 'pinia'
 import AutoSaApi from "@/api/api";
+import moment from 'moment'
+
+function sortList(listOfSources, sorting = {by: 'time', reverse: false}){
+  if (sorting.by == "id"){
+    listOfSources.sort((a, b) => (a.id > b.id) ? 1 : -1)
+  } else {
+    listOfSources.sort((a, b) => (moment(a.timestamp) < moment(b.timestamp)) ? 1 : -1)
+  }
+  if (sorting.reverse){
+    listOfSources.reverse()
+  }
+  return listOfSources
+}
 
 export const useSource = defineStore('source', {
   state: () => {
@@ -14,18 +27,58 @@ export const useSource = defineStore('source', {
       let alltags = new Set()
       state.sources.forEach(element => {
         element.tags.forEach(tag => {
-          alltags.add(tag)          
+          alltags.add(tag)
         });
       });
       return Array.from(alltags)
     },
-    getSourcesWithTag(state){
-      return (tag) => {
-        return state.sources.filter((x) => x.tags.includes(tag));
+    getSourcesByDate(state) {
+      return (dateOptions) => {
+        if (state.sources.length > 0) {
+          let allDataPoints = []
+          state.sources.forEach(source => {
+            if (
+              !dateOptions
+              || (
+                moment(dateOptions[0]).isBefore(moment(source["timestamp"]))
+                && moment(dateOptions[1]).isAfter(moment(source["timestamp"]))
+              )
+            ) {
+              allDataPoints.push(source)
+            }
+          });
+          return allDataPoints
+        }
+        return []
+      }
+    },
+    getSources() {
+      return (options) => {
+        let resultSources = this.getSourcesByDate(options.filters.time)
+        sortList(resultSources, options.sorting)
+        return resultSources
+      }
+    },
+    getSourcesWithTags(state) {
+      return (tags) => {
+        let listOfSources = state.sources.filter((source) => {
+          return source.tags.filter(tag => tags.includes(tag)).length > 0
+        })
+        return sortList(listOfSources)
+
+      }
+    },
+    getPinnedSources(state) {
+      return () => {
+        return sortList(state.sources.filter((x) => x.pinned));
       }
     }
   },
   actions: {
+    clearStore() {
+      this.sources = []
+      this.sourceIdDict = {}
+    },
     async getSourcesFromApi() {
       const data = await AutoSaApi.getSources().then((response) => { return response.data })
       this.sources = data
@@ -44,7 +97,7 @@ export const useSource = defineStore('source', {
       return AutoSaApi.createSource(data).then((r) => {
         if (r) {
           let newPosition = this.sources.push(r.data)
-          this.sourceIdDict[r.data.id] = newPosition
+          this.sourceIdDict[r.data.id] = newPosition - 1
         }
       })
     },
@@ -68,19 +121,19 @@ export const useSource = defineStore('source', {
       }
       this.sourceIdDict = newDict
     },
-    async addTag(id, tag){
+    async addTag(id, tag) {
       const IdPosition = this.sourceIdDict[id]
       let currentTags = [...this.sources[IdPosition]["tags"]] // copy list of tags
       currentTags.push(tag)
-      return this.changeSource(id, {'tags': currentTags})
+      return this.changeSource(id, { 'tags': currentTags })
     },
-    async deleteTag(id, tag){
+    async deleteTag(id, tag) {
       const IdPosition = this.sourceIdDict[id]
       let currentTags = [...this.sources[IdPosition]["tags"]] // copy list of tags
-      if (currentTags.indexOf(tag) != -1){
+      if (currentTags.indexOf(tag) != -1) {
         currentTags.splice(currentTags.indexOf(tag), 1)
       }
-      return this.changeSource(id, {'tags': currentTags})
+      return this.changeSource(id, { 'tags': currentTags })
     }
   },
 })

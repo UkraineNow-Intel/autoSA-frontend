@@ -2,12 +2,13 @@
   <el-tag
     v-for="tag in tags"
     :key="tag"
-    :closable="authStore.hasPermission('changeSource')"
+    :closable="authStore.hasPermission('change_source')"
     :disable-transitions="false"
+    @click="emit('tagClicked', tag)"
     @close="deleteTag(tag)"
   >{{ tag }}</el-tag>
 
-  <div v-if="authStore.hasPermission('changeSource')" style="display: inline-block">
+  <div v-if="authStore.hasPermission('change_source')" style="display: inline-block">
     <el-autocomplete
       v-if="inputVisible"
       ref="InputRef"
@@ -24,7 +25,7 @@
 </template>
 
 <script setup>
-import { nextTick, ref, defineProps } from 'vue'
+import { nextTick, ref, defineProps, defineEmits } from 'vue'
 import { useSource } from '@/stores/sources'
 import { useAuth } from '@/stores/auth'
 
@@ -35,6 +36,7 @@ const inputValue = ref('')
 const inputVisible = ref(false)
 const InputRef = ref()
 
+const emit = defineEmits(["tagClicked"])
 
 const props = defineProps({
   sourceId: { type: Number, required: true },

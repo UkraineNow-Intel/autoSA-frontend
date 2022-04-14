@@ -12,7 +12,7 @@
           @click="tagClicked(tag)"
         >{{ tag }}</el-tag>
         <div v-if="route.params.tag">
-          <dashboard-list :sources="sourceStore.getSourcesWithTag(route.params.tag)"></dashboard-list>
+          <source-list :sources="sourceStore.getSourcesWithTags([route.params.tag])"></source-list>
         </div>
       </div>
     </div>
@@ -26,7 +26,7 @@ import { onMounted } from 'vue';
 import { useSource } from '@/stores/sources'
 import router from "@/plugins/router";
 import { useRoute } from 'vue-router'
-import DashboardList from '../components/Dashboard/DashboardList.vue';
+import SourceList from '../components/SourceList/SourceList.vue';
 
 const route = useRoute()
 const sourceStore = useSource()

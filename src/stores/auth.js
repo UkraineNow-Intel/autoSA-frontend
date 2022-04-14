@@ -1,30 +1,30 @@
 import { defineStore } from 'pinia'
 import AutoSaApi from "@/api/api";
-import namedPermissions from '@/stores/config/permissions' 
+import { useSource } from './sources'
+import router from "@/plugins/router";
 
 export const useAuth = defineStore('auth', {
     state: () => {
         return {
-            isLoggedIn: false,
+            isLoggedIn: undefined,
             username: '',
-            permissions: {},
+            permissions: [],
         }
     },
     getters: {
         hasPermission: (state) => {
-            return (...args) => {
-                if (args.length == 1){
-                    if (!(args[0] in namedPermissions)) {
-                        console.log("Named permission not defined - misspelled?")
-                        return false
-                    }
-                    args = namedPermissions[args[0]]
-                }
-                return (args[0] in state.permissions && args[1] in state.permissions[args[0]] && state.permissions[args[0]][args[1]].includes(args[2])) 
+            // return (permissionName) => {return true}
+            return (permissionName) => {
+                return state.permissions.filter((x) => (x.codename == permissionName)).length > 0
             }
         }
     },
     actions: {
+        clearStore() {
+            this.isLoggedIn = false
+            this.username = ''
+            this.permissions = []
+        },
         async login(username, password) {
             try {
                 let e = await AutoSaApi.login(username, password).then((e) => { return e })
@@ -44,18 +44,17 @@ export const useAuth = defineStore('auth', {
                 this.permissions = e.data.permissions
                 return { 'success': true }
             } catch (e) {
-                this.username = ''
-                this.isLoggedIn = false
-                this.permissions = {}
+                this.clearStore()
                 return { 'success': false }
             }
         },
         async logout() {
             try {
                 await AutoSaApi.logout()
-                this.username = ''
-                this.isLoggedIn = false
-                this.permissions = {}
+                this.clearStore()
+                const sourceStore = useSource()
+                sourceStore.clearStore()
+                router.push({ name: 'login' })
                 return { 'success': true }
             } catch (e) {
                 return { 'success': false }

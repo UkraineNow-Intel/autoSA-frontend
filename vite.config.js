@@ -11,7 +11,14 @@ export default defineConfig(({ command }) => {
       alias: {
         '@': path.resolve(__dirname, './src'),
       },
-    }
+    },
+    test: {
+      globals: true,
+      deps: {
+        inline: ['element-plus'],
+      },
+      setupFiles: ['/test/setupTests.js']
+    },
   }
   if (command === 'build') {
     baseSettings['server'] = {
