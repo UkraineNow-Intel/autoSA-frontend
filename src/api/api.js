@@ -60,7 +60,7 @@ class AutoSaApi {
      * @param {Object} data: e.g. {'pinnend': true}
      */
     changeSource(id, data) {
-        return http.patch(`/api/sources/${id}`, data)
+        return http.patch(`/api/sources/${id}/?deleted=any`, data)
     }
 
     /**

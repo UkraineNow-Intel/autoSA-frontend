@@ -66,8 +66,7 @@
         <el-button
           v-if="authStore.hasPermission('change_source')"
           :loading="archiveLoading"
-          disabled
-          @click="confirmArchive"
+          @click="toggleArchiveItem"
         >{{ source.deleted ? 'Restore' : 'Archive' }}</el-button>
         <el-button
           v-if="authStore.hasPermission('delete_source')"
@@ -128,27 +127,14 @@ async function changeSource(sourceData) {
   editorLoading.value = false
 }
 
-
-async function confirmArchive() {
-  ElMessageBox.confirm(
-    'Do you really want to archive source ' + props.source["id"] + ' ?',
-    'Archive Source',
-    {
-      confirmButtonText: 'Archive Source',
-      cancelButtonText: 'Cancel',
-      type: 'warning',
-    }
-  )
-    .then(archiveItem)
-}
-
-async function archiveItem() {
+async function toggleArchiveItem() {
   archiveLoading.value = true
-  await sourceStore.changeSource(props.source["id"], {"deleted": true})
+  let word = props.source.deleted ? ' restored' : ' archived'
+  await sourceStore.changeSource(props.source["id"], {"deleted": !props.source.deleted})
   archiveLoading.value = false
   ElMessage({
     type: 'success',
-    message: 'Source ' + props.source["id"] + ' archived',
+    message: 'Source ' + props.source["id"] + word,
   })
 }
 
