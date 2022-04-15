@@ -81,7 +81,7 @@ export const useSource = defineStore('source', {
     },
     async getSourcesFromApi() {
       const data = await AutoSaApi.getSources().then((response) => { return response.data })
-      this.sources = data
+      this.sources = data.results
       this.updateSourceIdDict()
     },
     async changeSource(id, data) {

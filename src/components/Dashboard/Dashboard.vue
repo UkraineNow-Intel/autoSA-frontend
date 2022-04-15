@@ -164,7 +164,7 @@ const filteredSources = computed(() => {
         || source["text"].toLowerCase().includes(currentQuery)
         || source["tags"].includes(currentQuery)
         || source["headline"].toLowerCase().includes(currentQuery)
-        || source["source"].toLowerCase().includes(currentQuery)
+        || source["origin"].toLowerCase().includes(currentQuery)
       ) {
         allDataPoints.push(source)
       }
