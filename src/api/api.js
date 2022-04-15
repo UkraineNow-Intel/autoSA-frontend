@@ -40,9 +40,9 @@ class AutoSaApi {
     /**
      * returns a list of all sources
      */
-    getSources() {
+    getSources(options = {}) {
         // return sourceData
-        return http.get(`/api/sources`)
+        return http.get(`/api/sources/`, { params: options })
     }
 
     /**
@@ -76,7 +76,7 @@ class AutoSaApi {
      */
     refreshSources(overwriteExisting = false) {
         // return info on how man sources were added
-        return http.get(`/api/refresh/`, { "overwrite": overwriteExisting }).then((response) => {
+        return http.get(`/api/refresh/`, { params: { "overwrite": overwriteExisting } }).then((response) => {
             return response.data
         })
     }

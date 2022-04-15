@@ -87,7 +87,8 @@ const sidenavOptions = ref({
 
 const dashboardOptions = ref({
   filters: {
-    time: null
+    time: null,
+    includeArchived: false
   },
   sorting: {
     by: "time",

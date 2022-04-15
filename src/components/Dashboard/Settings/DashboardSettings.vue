@@ -20,6 +20,7 @@
     ></dashboard-settings-box>-->
     <!--<hr style="max-width: 50%; margin: 10px auto;" />-->
     <time-selector v-model="currentOptions.filters.time" />
+    <el-checkbox v-model="currentOptions.filters.includeArchived" label="Include archived" size="large" />
     <hr style="max-width: 80%; margin: 10px auto; border-top-width: 2px;" />
     <p style="padding: 5px; font-weight: bold; font-size: 1.2em;">Sort</p>
     <sorting-selector v-model="currentOptions.sorting" />
