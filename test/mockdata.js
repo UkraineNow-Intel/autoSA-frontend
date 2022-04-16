@@ -1,91 +1,134 @@
+const sourceDataDeleted = {
+    results: [
+        {
+            "id": 8,
+            "interface": "website",
+            "origin": "https://example.com",
+            "headline": "Testsource",
+            "text": "This source was deleted.",
+            "language": "en",
+            "deleted": true,
+            "pinned": true,
+            "timestamp": "2022-04-05T13:02:14Z",
+            "tags": [
+                "route-1",
+                "route-2"
+            ],
+            "translations": []
+        },
+        {
+            "id": 15,
+            "interface": "twitter",
+            "origin": "@testperson",
+            "headline": "",
+            "text": "This was deleted as well.",
+            "language": "en",
+            "deleted": true,
+            "pinned": false,
+            "timestamp": "2020-03-31T22:00:00Z",
+            "tags": [
+                "route-1"
+            ],
+            "translations": []
+        }
+    ]
+}
 
-const sourceData = [
-    {
-        "id": 9,
-        "interface": "website",
-        "source": "https://example.com",
-        "headline": "Testsource",
-        "text": "This source is important for route 1 and route 2.",
-        "language": "en",
-        "pinned": true,
-        "timestamp": "2022-04-05T13:02:14Z",
-        "tags": [
-            "route-1",
-            "route-2"
-        ],
-        "translations": []
-    },
-    {
-        "id": 10,
-        "interface": "twitter",
-        "source": "@testperson",
-        "headline": "",
-        "text": "This old source is important for route 1.",
-        "language": "en",
-        "pinned": false,
-        "timestamp": "2020-03-31T22:00:00Z",
-        "tags": [
-            "route-1"
-        ],
-        "translations": []
-    },
-    {
-        "id": 11,
-        "interface": "api",
-        "source": "Fraktal",
-        "headline": "",
-        "text": "This source is important for route 2.",
-        "language": "ua",
-        "pinned": false,
-        "timestamp": "2022-03-31T22:00:00Z",
-        "tags": [
-            "route-2"
-        ],
-        "translations": []
-    },
-    {
-        "id": 12,
-        "interface": "twitter",
-        "source": "@twitterguy",
-        "headline": "",
-        "text": "This is an unimportant post with no tags...",
-        "language": "en",
-        "pinned": true,
-        "timestamp": "2022-04-19T22:00:00Z",
-        "tags": [],
-        "translations": []
-    },
-    {
-        "id": 13,
-        "interface": "website",
-        "source": "http://google.com",
-        "headline": "",
-        "text": "This source is so important, that it's even pinned!",
-        "language": "en",
-        "pinned": true,
-        "timestamp": "2010-04-03T22:00:00Z",
-        "tags": [],
-        "translations": []
-    },
-    {
-        "id": 14,
-        "interface": "website",
-        "source": "book",
-        "headline": "",
-        "text": "This source is pinned and also important for route 2. You can hide it in the right column using \"hide all pinned\". It further has a really long text, so I am going to keep adding random words here so that you might see that it overflows at some point. All items have a fixed height, wherefore a small scrollbar appears on the right when the text is too long.",
-        "language": "en",
-        "pinned": true,
-        "timestamp": "2022-04-03T22:00:00Z",
-        "tags": [
-            "route-2"
-        ],
-        "translations": []
-    }
-]
+const sourceData = {
+    results: [
+        {
+            "id": 9,
+            "interface": "website",
+            "origin": "https://example.com",
+            "headline": "Testsource",
+            "text": "This source is important for route 1 and route 2.",
+            "language": "en",
+            "deleted": false,
+            "pinned": true,
+            "timestamp": "2022-04-05T13:02:14Z",
+            "tags": [
+                "route-1",
+                "route-2"
+            ],
+            "translations": []
+        },
+        {
+            "id": 10,
+            "interface": "twitter",
+            "origin": "@testperson",
+            "headline": "",
+            "text": "This old source is important for route 1.",
+            "language": "en",
+            "deleted": false,
+            "pinned": false,
+            "timestamp": "2020-03-31T22:00:00Z",
+            "tags": [
+                "route-1"
+            ],
+            "translations": []
+        },
+        {
+            "id": 11,
+            "interface": "api",
+            "origin": "Fraktal",
+            "headline": "",
+            "text": "This source is important for route 2.",
+            "language": "ua",
+            "deleted": false,
+            "pinned": false,
+            "timestamp": "2022-03-31T22:00:00Z",
+            "tags": [
+                "route-2"
+            ],
+            "translations": []
+        },
+        {
+            "id": 12,
+            "interface": "twitter",
+            "origin": "@twitterguy",
+            "headline": "",
+            "text": "This is an unimportant post with no tags...",
+            "language": "en",
+            "deleted": false,
+            "pinned": true,
+            "timestamp": "2022-04-19T22:00:00Z",
+            "tags": [],
+            "translations": []
+        },
+        {
+            "id": 13,
+            "interface": "website",
+            "origin": "http://google.com",
+            "headline": "",
+            "text": "This source is so important, that it's even pinned!",
+            "language": "en",
+            "deleted": false,
+            "pinned": true,
+            "timestamp": "2010-04-03T22:00:00Z",
+            "tags": [],
+            "translations": []
+        },
+        {
+            "id": 14,
+            "interface": "website",
+            "origin": "book",
+            "headline": "",
+            "text": "This source is pinned and also important for route 2. You can hide it in the right column using \"hide all pinned\". It further has a really long text, so I am going to keep adding random words here so that you might see that it overflows at some point. All items have a fixed height, wherefore a small scrollbar appears on the right when the text is too long.",
+            "language": "en",
+            "deleted": false,
+            "pinned": true,
+            "timestamp": "2022-04-03T22:00:00Z",
+            "tags": [
+                "route-2"
+            ],
+            "translations": []
+        }
+    ]
+}
 
 const newSourceData = {
     "interface": "twitter",
-    "source": "@newTwitterAccount",
+    "origin": "@newTwitterAccount",
     "headline": "",
     "text": "This source was newly created.",
     "language": "en",
@@ -162,4 +205,4 @@ const whoamiData = {
         { "id": 31, "name": "Can delete tagged item", "content_type_id": 8, "codename": "delete_taggeditem" },
         { "id": 32, "name": "Can view tagged item", "content_type_id": 8, "codename": "view_taggeditem" }]
 }
-export { whoamiData, sourceData, newSourceData }
+export { whoamiData, sourceData, sourceDataDeleted, newSourceData }

@@ -4,8 +4,8 @@ import { test, describe, expect} from 'vitest';
 import { newSourceData } from '/test/mockdata.js'
 
 
-describe('Sources Store', () => {
-  const sourceStore = useSource(createPinia())
+describe('Sources Store', async () => {
+  let sourceStore = useSource(createPinia())
 
   test('Getting sources', async () => {
     expect(sourceStore.sources).eql([])
@@ -15,7 +15,39 @@ describe('Sources Store', () => {
 
   })
 
+  test('Adding deleted sources', async () => {
+    await sourceStore.getSourcesFromApi({deleted: true})
+    expect(sourceStore.sources).toHaveLength(8)
+    expect(sourceStore.sourceIdDict[11]).eql(2)
+
+  })
+
+  test('Filtering deleted sources', async () => {
+    const includeArchivedSources = sourceStore.getSources({
+      filters: {
+        includeArchived: true
+      }
+    })
+    const excludeArchivedSources = sourceStore.getSources({
+      filters: {
+        includeArchived: false
+      }
+    })
+    expect(includeArchivedSources).toHaveLength(8)
+    expect(excludeArchivedSources).toHaveLength(6)
+  })
+
+
+  test('Getting only deleted sources', async () => {
+    sourceStore = useSource(createPinia())
+    await sourceStore.getSourcesFromApi({deleted: true})
+    expect(sourceStore.sources).toHaveLength(2)
+
+  })
+
   test('Getting sources with tags', async () => {
+    sourceStore = useSource(createPinia())
+    await sourceStore.getSourcesFromApi()
     const route1 = sourceStore.getSourcesWithTags(["route-1"])
     const route2 = sourceStore.getSourcesWithTags(["route-2"])
     expect(route1).toHaveLength(2)

@@ -2,16 +2,45 @@ import { defineStore } from 'pinia'
 import AutoSaApi from "@/api/api";
 import moment from 'moment'
 
-function sortList(listOfSources, sorting = {by: 'time', reverse: false}){
-  if (sorting.by == "id"){
+function sortList(listOfSources, sorting = { by: 'time', reverse: false }) {
+  if (sorting.by == "id") {
     listOfSources.sort((a, b) => (a.id > b.id) ? 1 : -1)
   } else {
     listOfSources.sort((a, b) => (moment(a.timestamp) < moment(b.timestamp)) ? 1 : -1)
   }
-  if (sorting.reverse){
+  if (sorting.reverse) {
     listOfSources.reverse()
   }
   return listOfSources
+}
+
+function filterSourcesByDate(sources, dateOptions) {
+  if (sources.length > 0) {
+    let allDataPoints = []
+    sources.forEach(source => {
+      if (
+        !dateOptions
+        || (
+          moment(dateOptions[0]).isBefore(moment(source["timestamp"]))
+          && moment(dateOptions[1]).isAfter(moment(source["timestamp"]))
+        )
+      ) {
+        allDataPoints.push(source)
+      }
+    });
+    return allDataPoints
+  }
+  return []
+}
+
+function filterSourceByBoolean(sources, field, value) {
+  if (value == "any") {
+    return sources
+  }
+  console.log(value)
+  return sources.filter((source) => {
+    return source[field] == value
+  })
 }
 
 export const useSource = defineStore('source', {
@@ -19,7 +48,10 @@ export const useSource = defineStore('source', {
     return {
       // all these properties will have their type inferred automatically
       sources: [],
-      sourceIdDict: {}
+      sourceIdDict: {},
+      includes: {
+        deleted: false
+      }
     }
   },
   getters: {
@@ -32,31 +64,20 @@ export const useSource = defineStore('source', {
       });
       return Array.from(alltags)
     },
-    getSourcesByDate(state) {
-      return (dateOptions) => {
-        if (state.sources.length > 0) {
-          let allDataPoints = []
-          state.sources.forEach(source => {
-            if (
-              !dateOptions
-              || (
-                moment(dateOptions[0]).isBefore(moment(source["timestamp"]))
-                && moment(dateOptions[1]).isAfter(moment(source["timestamp"]))
-              )
-            ) {
-              allDataPoints.push(source)
-            }
-          });
-          return allDataPoints
-        }
-        return []
-      }
-    },
-    getSources() {
+    getSources(state) {
       return (options) => {
-        let resultSources = this.getSourcesByDate(options.filters.time)
-        sortList(resultSources, options.sorting)
-        return resultSources
+        if (options.filters.includeArchived == true && state.includes.deleted == false) {
+          state.includes.deleted = true
+          this.getSourcesFromApi({ deleted: true })
+        }
+        let deletedOption = false
+        if (options) {
+          deletedOption = options.filters.includeArchived ? 'any' : false
+        }
+        let currentSources = filterSourceByBoolean(state.sources, 'deleted', deletedOption)
+        currentSources = filterSourcesByDate(currentSources, options.filters.time)
+        sortList(currentSources, options.sorting)
+        return currentSources
       }
     },
     getSourcesWithTags(state) {
@@ -79,9 +100,15 @@ export const useSource = defineStore('source', {
       this.sources = []
       this.sourceIdDict = {}
     },
-    async getSourcesFromApi() {
-      const data = await AutoSaApi.getSources().then((response) => { return response.data })
-      this.sources = data
+    async getSourcesFromApi(options = {}) {
+      const data = await AutoSaApi.getSources(options).then((response) => { return response.data })
+      data.results.forEach(element => {
+        if (element.id in this.sourceIdDict) {
+          this.sources[this.sourceIdDict[element.id]] = element
+        } else {
+          this.sources.push(element)
+        }
+      });
       this.updateSourceIdDict()
     },
     async changeSource(id, data) {

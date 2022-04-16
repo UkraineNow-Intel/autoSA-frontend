@@ -7,13 +7,13 @@
     @mouseleave="updateHovered(-1)"
   >
     <div class="flex flex-1 flex-col" style="height: 100%; text-align: left;">
-      <div v-if="source.image" class="dashboard-image flex-none">
-        <el-image :src="source.image" fit="cover" />
+      <div v-if="source.media_url" class="dashboard-image flex-none">
+        <el-image :src="source.media_url" fit="cover" />
       </div>
       <div class="dashboard-meta flex-none">
-        <div v-if="source.source">
+        <div v-if="source.origin">
           <span>Posted:</span>
-          <span>{{ source.source }}</span>
+          <span>{{ source.origin }}</span>
           <span v-if="source.interface" style="padding-left: 3px;">({{ source.interface }})</span>
         </div>
         <div v-if="source.timestamp">
@@ -21,8 +21,24 @@
           <span>{{ moment(source.timestamp).format("ddd MMM DD, YYYY [at] HH:mm a") }}</span>
         </div>
         <div v-if="source.id">
-          <span>Id:</span>
+          <span>ID:</span>
           <span>{{ source.id }}</span>
+        </div>
+        <!--<div v-if="source.external_id">
+          <span>External ID:</span>
+          <span>{{ source.external_id }}</span>
+        </div>
+        <div v-if="source.timestamp_created">
+          <span>Time:</span>
+          <span>{{ moment(source.timestamp_created).format("ddd MMM DD, YYYY [at] HH:mm a") }}</span>
+        </div>
+        <div v-if="source.timestamp_updated">
+          <span>Time:</span>
+          <span>{{ moment(source.timestamp_updated).format("ddd MMM DD, YYYY [at] HH:mm a") }}</span>
+        </div>
+        -->
+        <div v-if="source.url">
+          <a :href="source.url" target="_blank">Link</a>
         </div>
       </div>
       <div v-if="source.headline" class="dashboard-headline flex-none">
@@ -47,6 +63,11 @@
           :loading="changeLoading"
           @click="showChangeDialog = !showChangeDialog"
         >Edit</el-button>
+        <el-button
+          v-if="authStore.hasPermission('change_source')"
+          :loading="archiveLoading"
+          @click="toggleArchiveItem"
+        >{{ source.deleted ? 'Restore' : 'Archive' }}</el-button>
         <el-button
           v-if="authStore.hasPermission('delete_source')"
           :loading="deleteLoading"
@@ -75,6 +96,7 @@ const emit = defineEmits(['hovered', 'showOnMap', 'tagClicked'])
 const item = ref(null)
 const pinningLoading = ref(false)
 const changeLoading = ref(false)
+const archiveLoading = ref(false)
 const deleteLoading = ref(false)
 const showChangeDialog = ref(false)
 const editorLoading = ref(false)
@@ -105,6 +127,16 @@ async function changeSource(sourceData) {
   editorLoading.value = false
 }
 
+async function toggleArchiveItem() {
+  archiveLoading.value = true
+  let word = props.source.deleted ? ' restored' : ' archived'
+  await sourceStore.changeSource(props.source["id"], {"deleted": !props.source.deleted})
+  archiveLoading.value = false
+  ElMessage({
+    type: 'success',
+    message: 'Source ' + props.source["id"] + word,
+  })
+}
 
 async function confirmDelete() {
   ElMessageBox.confirm(
@@ -121,7 +153,7 @@ async function confirmDelete() {
 
 async function deleteItem() {
   deleteLoading.value = true
-  await sourceStore.deleteSource(props.source["id"])
+  await sourceStore.deleteSource(props.source["id"], true)
   deleteLoading.value = false
   ElMessage({
     type: 'success',

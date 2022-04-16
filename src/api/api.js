@@ -40,14 +40,14 @@ class AutoSaApi {
     /**
      * returns a list of all sources
      */
-    getSources() {
+    getSources(options = {}) {
         // return sourceData
-        return http.get(`/api/sources`)
+        return http.get(`/api/sources/`, { params: options })
     }
 
     /**
      * create new source providing data
-     * @param {Object} data: e.g. {"tags": [], "interface": "website", "source": "@Blah", "headline": "", "text": "Щось трапилося", "language": "ua", "timestamp": "2022-04-01T20:25:00Z", "pinned": "true", "translations": []}
+     * @param {Object} data: e.g. {"tags": [], "interface": "website", "origin": "@Blah", "headline": "", "text": "Щось трапилося", "language": "ua", "timestamp": "2022-04-01T20:25:00Z", "pinned": "true", "translations": []}
      */
     createSource(data) {
         // return sourceData
@@ -60,7 +60,7 @@ class AutoSaApi {
      * @param {Object} data: e.g. {'pinnend': true}
      */
     changeSource(id, data) {
-        return http.patch(`/api/sources/${id}`, data)
+        return http.patch(`/api/sources/${id}/?deleted=any`, data)
     }
 
     /**
@@ -69,6 +69,16 @@ class AutoSaApi {
      */
     deleteSource(id) {
         return http.delete(`/api/sources/${id}`)
+    }
+
+    /**
+     * triggers the backend to get new sources from e.g. twitter, telegram etc.
+     */
+    refreshSources(overwriteExisting = false) {
+        // return info on refresh process
+        return http.get(`/api/refresh/`, { params: { "overwrite": overwriteExisting } }).then((response) => {
+            return response.data
+        })
     }
 }
 export default new AutoSaApi();

@@ -19,7 +19,7 @@
           <el-affix target=".affix-container-map" style="width: 100%;" :offset="10">
             <el-tabs v-model="currentTab" type="border-card" style="margin: 1em;" @tab-click="invalidateMap">
               <el-tab-pane label="Pinned" name="pinned">
-                <div class="sticky-source-list">
+                <div v-if="currentTab == 'pinned'" class="sticky-source-list">
                   <source-list
                     :hovered-source-id="hoveredSourceId" :sources="sourceStore.getPinnedSources()"
                     single-column @hovered="updateHovered" @show-on-map="showIdOnMap"
@@ -27,7 +27,7 @@
                 </div>
               </el-tab-pane>
               <el-tab-pane label="Tags" name="tags">
-                <div class="sticky-source-list-filter">
+                <div v-if="currentTab == 'tags'" class="sticky-source-list-filter">
                   <source-list-quick-filter v-model="sidenavOptions"></source-list-quick-filter>
                 </div>
                 <div class="sticky-source-list with-borders">
@@ -39,11 +39,13 @@
                 </div>
               </el-tab-pane>
               <el-tab-pane label="Map" name="map">
-                <auto-sa-map
-                  ref="mapinstance" style="width: 100%; max-width: 1000px; height: 60vh;"
-                  :sources="filteredSources" :hovered-source-id="hoveredSourceId" @hovered="updateHovered"
-                  @marker-clicked="scrollSourceIntoView"
-                ></auto-sa-map>
+                <div>
+                  <auto-sa-map
+                    ref="mapinstance" style="width: 100%; max-width: 1000px; height: 60vh;"
+                    :sources="filteredSources" :hovered-source-id="hoveredSourceId" @hovered="updateHovered"
+                    @marker-clicked="scrollSourceIntoView"
+                  ></auto-sa-map>
+                </div>
               </el-tab-pane>
             </el-tabs>
           </el-affix>
@@ -85,7 +87,8 @@ const sidenavOptions = ref({
 
 const dashboardOptions = ref({
   filters: {
-    time: null
+    time: null,
+    includeArchived: false
   },
   sorting: {
     by: "time",
@@ -162,7 +165,7 @@ const filteredSources = computed(() => {
         || source["text"].toLowerCase().includes(currentQuery)
         || source["tags"].includes(currentQuery)
         || source["headline"].toLowerCase().includes(currentQuery)
-        || source["source"].toLowerCase().includes(currentQuery)
+        || source["origin"].toLowerCase().includes(currentQuery)
       ) {
         allDataPoints.push(source)
       }

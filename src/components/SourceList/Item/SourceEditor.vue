@@ -10,7 +10,7 @@
         </el-select>
       </el-form-item>
       <el-form-item prop="source">
-        <el-input v-model="model.source" placeholder="Source (e.g. @ukrainenow)"></el-input>
+        <el-input v-model="model.origin" placeholder="Source (e.g. @ukrainenow)"></el-input>
       </el-form-item>
       <el-form-item prop="headline">
         <el-input v-model="model.headline" placeholder="Headline"></el-input>
@@ -58,7 +58,7 @@ const location = ref({
 
 const model = ref({
   "interface": "",
-  "source": "",
+  "origin": "",
   "headline": "",
   "text": "",
   "language": "",

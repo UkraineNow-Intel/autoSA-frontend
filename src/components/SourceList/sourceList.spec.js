@@ -21,7 +21,7 @@ describe('Source List and Source Item components', () => {
             plugins: [ElementPlus, pinia]
         },
         props: {
-            sources: sourceData
+            sources: sourceData.results
         }
     }
 
@@ -43,6 +43,6 @@ describe('Source List and Source Item components', () => {
         const wrapper = mount(SourceList, mountSettings)
         const sourceItems = wrapper.findAllComponents(Source)
         const buttons = sourceItems[0].findAllComponents(ElButton)
-        expect(buttons).toHaveLength(4) // has three buttons: New Tag, Unpin, Edit, Delete
+        expect(buttons).toHaveLength(5) // has three buttons: New Tag, Unpin, Edit, Delete
     })
 })

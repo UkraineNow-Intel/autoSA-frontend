@@ -1,7 +1,7 @@
 import { afterAll, afterEach, beforeAll } from 'vitest'
 import { setupServer } from 'msw/node'
 import { rest } from 'msw'
-import { sourceData, newSourceData } from "./mockdata"
+import { sourceData, newSourceData, sourceDataDeleted } from "./mockdata"
 
 
 function addBackendFieldsToSource(sourceObject){
@@ -13,7 +13,13 @@ function addBackendFieldsToSource(sourceObject){
 
 export const restHandlers = [
     rest.get('http://localhost/api/sources', (req, res, ctx) => {
-        return res(ctx.status(200), ctx.json(sourceData))
+        if (req.url.searchParams.get("deleted") == null){
+            return res(ctx.status(200), ctx.json(sourceData))
+        } else if (req.url.searchParams.get("deleted")) {
+            return res(ctx.status(200), ctx.json(sourceDataDeleted))
+        } else {
+            console.log("Error! No data for this in mockdata yet")
+        }
     }),
     rest.post('http://localhost/api/sources', (req, res, ctx) => {
         const sourceObject = addBackendFieldsToSource(req.body)
