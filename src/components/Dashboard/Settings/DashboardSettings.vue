@@ -66,16 +66,20 @@ const props = defineProps({
 function refreshSources(){
   refreshLoading.value = true
   AutoSaApi.refreshSources().then((response) => {
-    refreshLoading.value = false
-    console.log("test", response)
+    let processed = 0
+    for (const [key, value] of Object.entries(response)) {
+      console.log(`${key}: ${value}`);
+      processed += response[key]["processed"]
+    }
     ElNotification({
         title: 'Refresh completed',
-        message: response.newly_added == 0 ? 'No new sources were found' : `Newly added: ${response.newly_added}`,
+        message: `${processed} sources were processed`,
         type: 'success',
     })
-    if (response.newly_added != 0){
+    if (processed != 0){
       sourceStore.getSourcesFromApi()
     }
+    refreshLoading.value = false
   })
 }
 

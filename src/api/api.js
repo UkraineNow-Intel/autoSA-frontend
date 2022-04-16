@@ -75,7 +75,7 @@ class AutoSaApi {
      * triggers the backend to get new sources from e.g. twitter, telegram etc.
      */
     refreshSources(overwriteExisting = false) {
-        // return info on how man sources were added
+        // return info on refresh process
         return http.get(`/api/refresh/`, { params: { "overwrite": overwriteExisting } }).then((response) => {
             return response.data
         })
