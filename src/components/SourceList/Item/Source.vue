@@ -8,7 +8,13 @@
   >
     <div class="flex flex-1 flex-col" style="height: 100%; text-align: left;">
       <div v-if="source.media_url" class="dashboard-image flex-none">
-        <el-image :src="source.media_url" fit="cover" />
+        <el-image
+          :src="source.media_url"
+          :preview-src-list="[source.media_url]"
+          :initial-index="4"
+          lazy
+          fit="cover"
+        />
       </div>
       <div class="dashboard-meta flex-none">
         <div v-if="source.origin">

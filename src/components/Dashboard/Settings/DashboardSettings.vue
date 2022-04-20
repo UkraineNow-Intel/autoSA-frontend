@@ -67,9 +67,9 @@ function refreshSources(){
   refreshLoading.value = true
   AutoSaApi.refreshSources().then((response) => {
     let processed = 0
-    for (const [key, value] of Object.entries(response)) {
+    for (const [key, value] of Object.entries(response.sites)) {
       console.log(`${key}: ${value}`);
-      processed += response[key]["processed"]
+      processed += response.sites[key]["processed"]
     }
     ElNotification({
         title: 'Refresh completed',
